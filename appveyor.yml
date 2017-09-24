@@ -12,7 +12,7 @@ skip_commits:
 install:
   - cinst pester -y
 
-build: off
+build: false
 
 test_script:
 # Test with native PS version
