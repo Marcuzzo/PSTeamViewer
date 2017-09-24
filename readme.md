@@ -7,6 +7,20 @@ This is a PowerShell module API wrapper for the [TeamViewer API](https://integra
 ## Description
 This project is still a work in progress
 
+## Available CmdLets
+
+ * Initialize-TVAPI
+ * Test-TVToken 
+ * Get-TVOauth2Token
+ * Get-TVAccount
+ * Get-TVUser
+ * Set-TVUser
+ * New-TVUser
+ * Get-TVGroup
+ * New-TVGroup
+ * Remove-TVGroup
+ * Get-TVDevice
+
 ## Examples
 
 ```Powershell
