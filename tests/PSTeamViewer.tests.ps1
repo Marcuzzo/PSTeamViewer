@@ -1,4 +1,11 @@
-﻿Import-Module "$PSScriptRoot\..\PSTeamViewer\PSTeamViewer.psd1" -Force
+﻿
+#handle PS2
+if(-not $PSScriptRoot)
+{
+    $PSScriptRoot = Split-Path $MyInvocation.MyCommand.Path -Parent
+}
+
+Import-Module "$PSScriptRoot\..\PSTeamViewer\PSTeamViewer.psd1" -Force
 
 
 InModuleScope PSTeamViewer {
@@ -41,7 +48,6 @@ InModuleScope PSTeamViewer {
         BeforeEach {
             [string] $TVUserTestData = '{"id":"u1111111","name":"firstname lastname","permissions":"EditConnections,EditFullProfile,ViewOwnAssets,EditOwnCustomModuleConfigs,ViewOwnConnections","active":false,"log_sessions":true,"show_comment_window":false}'
         }
-
         
         Mock -CommandName Invoke-RestMethod -Verifiable -MockWith {
             if ( ( ! ( [string]::IsNullOrEmpty($Body.name))) -or ( ! ( [string]::IsNullOrEmpty($Body.email)))) {
