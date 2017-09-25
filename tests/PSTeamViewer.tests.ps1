@@ -67,7 +67,13 @@ InModuleScope PSTeamViewer {
             $uri -match "/api/v1/users" -and  $Method -eq 'Put'
         } -ModuleName PSTeamViewer
 
-            
+        
+        Mock -CommandName Invoke-RestMethod -Verifiable -MockWith {                
+            return (    $TVUserTestData| ConvertFrom-Json )
+        } -ParameterFilter {
+            $uri -match "/api/v1/account" -and  $Method -eq 'Get'
+        } -ModuleName PSTeamViewer
+
         Mock -CommandName Invoke-RestMethod -Verifiable -MockWith {
             $user_id = ('u{0}' -f (Get-Random -Maximum 999999999 -Minimum 1000000) )
             
@@ -119,6 +125,8 @@ InModuleScope PSTeamViewer {
             }
 
         }
+
+      
         
     }
 

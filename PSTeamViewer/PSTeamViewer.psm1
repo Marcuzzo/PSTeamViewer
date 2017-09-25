@@ -3,19 +3,13 @@
     Author: Marco Micozzi
     Requires Powershell 5
 #>
-
 #region Module Variables
-
-
-#[string] $script:fmt_AuthBearer = "Authorization: Bearer {0}"
 [string] $script:fmt_AuthBearer = "Bearer {0}"
-
 [string] $script:TOKEN_MISSING_ERROR = 'No AccessToken found, please supply the token or run Initialize-TeamViewerAPI with a valid token first'
 [string] $script:TOKEN_INVALID = 'Invalid Token'
-
-
 [hashtable] $script:TVConfig = @{
     BaseUrl = 'https://webapi.teamviewer.com'
+    LoginUrl = 'https://login.teamviewer.com'
     ApiVersion = 'v1'
     AccessToken = ''
     TokenValid = $false
@@ -23,12 +17,185 @@
         Authorization = ''
     }
 }
-
-
 #endregion
 
-#region Initialization
+#region Classes
 
+class TVUserBase
+{
+    [ValidateNotNullOrEmpty()][string]$ID
+    [ValidateNotNullOrEmpty()][string]$Name       
+    TVUserBase($ID, $Name){
+        $this.ID = $ID
+        $this.Name = $Name
+    }
+}
+
+class TVUser : TVUserBase
+{
+    [ValidateNotNullOrEmpty()][string[]]$Permissions
+    [ValidateNotNullOrEmpty()][bool]$Active
+    [bool]$LogSessions
+    [bool]$ShowCommentWindow
+    [string]$QuickSupportID
+    [string]$QuickJoinID
+    TVUser(
+            $ID, 
+            $Name, 
+            $Permissions, 
+            $Active, 
+            $LogSessions, 
+            $ShowCommentWindow, 
+            $QuickSupportID, 
+            $QuickJoinID
+    ) 
+    : base ($ID, $Name) 
+    {        
+       $this.Permissions = $Permissions
+       $this.Active = $Active
+       $this.QuickSupportID = $QuickSupportID
+       $this.QuickJoinID = $QuickJoinID
+       $this.ShowCommentWindow = $ShowCommentWindow
+       $this.LogSessions = $LogSessions
+    }
+    TVUser(
+            $ID, 
+            $Name, 
+            $Permissions, 
+            $Active, 
+            $LogSessions, 
+            $ShowCommentWindow
+    ) 
+    : base ($ID, $Name) 
+    {
+       $this.Permissions = $Permissions
+       $this.Active = $Active
+       $this.ShowCommentWindow = $ShowCommentWindow
+       $this.LogSessions = $LogSessions
+    }
+}
+
+Class TVAccount : TVUserBase
+{
+    [string] $Email
+    [string] $CompanyName
+    TVAccount ( 
+                [string] $ID, 
+                [string] $Name, 
+                [string] $Email, 
+                [string] $CompanyName
+    ) 
+    : base ($ID, $Name)
+    {
+        $this.Email = $Email
+        $this.CompanyName = $CompanyName
+    }
+}
+
+Class TVGroupUser : TVUserBase
+{
+    [string] $Permissions = [string]::Empty
+    [bool] $Pending = $false
+    TVGroupUser ( $ID, $Name, $Permissions, $Pending) 
+    : base ( $ID, $Name) 
+    {
+        $this.Permissions = $Permissions
+        $this.Pending = $Pending
+    }
+    TVGroupUser ( $ID, $Name, $Permissions) 
+    : base ( $ID, $Name) 
+    {
+        $this.Permissions = $Permissions
+    }
+}
+
+
+Class TVGroup 
+{
+    [ValidateNotNullOrEmpty()][string]$ID
+    [ValidateNotNullOrEmpty()][string]$Name
+    [TVUserBase] $Owner
+    [ValidateNotNullOrEmpty()][string]$Permissions
+    [ValidateNotNullOrEmpty()][string]$PolicyID
+    [TVGroupUser[]] $SharedWith
+    TVGroup ( 
+                [string] $ID, 
+                [string] $Name, 
+                [TVUserBase] $Owner, 
+                [string] $Permissions, 
+                [TVGroupUser[]] $SharedWith
+            )
+    {
+        $this.ID = $ID
+        $this.Name = $Name
+        $this.Owner = $Owner
+        $this.Permissions = $Permissions
+        $this.SharedWith = $SharedWith
+    }
+}
+
+Class TVDevice
+{
+    [string] $RemoteControlID
+    [string] $DeviceID
+    [string] $Alias
+    [string] $GroupID
+    [string] $OnlineStatus
+    [bool] $AssignedTo
+    [string] $SupportedFeatures
+    TVDevice ( [string] $RemoteControlID, 
+               [string] $DeviceID, 
+               [string] $Alias, 
+               [string] $GroupID, 
+               [string] $OnlineStatus, 
+               [bool] $AssignedTo, 
+               [string] $SupportedFeatures
+            )
+    {
+        $this.Alias = $Alias
+        $this.AssignedTo = $AssignedTo
+        $this.DeviceID = $DeviceID
+        $this.GroupID = $GroupID
+        $this.OnlineStatus = $OnlineStatus
+        $this.RemoteControlID = $RemoteControlID
+        $this.SupportedFeatures = $SupportedFeatures
+    }
+}
+#endregion
+    
+#region Helpers
+function Initialize-TVUserObject
+{
+    [CmdLetBinding()]
+    [OutputType([TVUser])]
+    param(
+        [Parameter(Mandatory = $true)]
+        [psobject] $Json
+    )
+    [string] $QuickSupportID = [System.String]::Empty
+    if( $Json.custom_quicksupport_id -ne $null)
+    {
+        $QuickSupportID = $Json.custom_quicksupport_id
+    }    
+    [string] $QuickJoinID = [System.String]::Empty
+    if( $Json.custom_quickjoin_id -ne $null)
+    {
+        $QuickJoinID = $Json.custom_quickjoin_id
+    }    
+    [string[]] $Permissions = $Json.permissions -split ','
+    [TVUser] $TVUser = New-Object TVUser -ArgumentList $Json.id, `
+                                                       $Json.name, `
+                                                       $Permissions, `
+                                                       $Json.active, `
+                                                       $Json.log_sessions, `
+                                                       $Json.show_comment_window, `
+                                                       $QuickSupportID, `
+                                                       $QuickJoinID
+    Write-Output -InputObject $TVUser
+}
+#endregion Helpers
+
+#region Initialization
 function Initialize-TVAPI
 {
     [CmdletBinding()]
@@ -53,10 +220,7 @@ function Initialize-TVAPI
         $script:TVConfig.Header.Authorization = ($script:fmt_AuthBearer -f $Token)
     }    
 }
-
-
 #endregion
-
 
 #region Ping
 
@@ -69,7 +233,6 @@ function Test-TVToken
         [ValidateNotNullOrEmpty()]
         [string] $Token 
     )
-
     begin
     {    
         [string] $RequestUrl = ('{0}/api/{1}/ping' -f $script:TVConfig.BaseUrl, $script:TVConfig.ApiVersion)
@@ -77,7 +240,9 @@ function Test-TVToken
     }
     process
     {
-        $TVResponse = Invoke-RestMethod -Method Get -Uri $RequestUrl -Headers @{ Authorization = ($script:fmt_AuthBearer -f $Token)} 
+        $TVResponse = Invoke-RestMethod -Method Get `
+                                        -Uri $RequestUrl `
+                                        -Headers @{ Authorization = ($script:fmt_AuthBearer -f $Token)} 
         Write-Verbose -Message $TVResponse
     }
     end
@@ -86,183 +251,46 @@ function Test-TVToken
         return ( $TVResponse.token_valid -eq 'true')
     }
 }
-
 #endregion
-
-
-
-#region Classes
-
-class TVUserBase
-{
-    
-    [ValidateNotNullOrEmpty()][string]$ID
-    [ValidateNotNullOrEmpty()][string]$Name    
-    
-    TVUserBase($ID, $Name){
-        $this.ID = $ID
-        $this.Name = $Name
-    }
-
-}
-
-class TVUser : TVUserBase
-{
-    [ValidateNotNullOrEmpty()][string[]]$Permissions
-    [ValidateNotNullOrEmpty()][bool]$Active
-    [bool]$LogSessions
-    [bool]$ShowCommentWindow
-    [string]$QuickSupportID
-    [string]$QuickJoinID
-
-    TVUser($ID, $Name, $Permissions, $Active, $LogSessions, $ShowCommentWindow, $QuickSupportID, $QuickJoinID) 
-    : base ($ID, $Name) 
-    {        
-       $this.Permissions = $Permissions
-       $this.Active = $Active
-       $this.QuickSupportID = $QuickSupportID
-       $this.QuickJoinID = $QuickJoinID
-       $this.ShowCommentWindow = $ShowCommentWindow
-       $this.LogSessions = $LogSessions
-    }
-
-    TVUser($ID, $Name, $Permissions, $Active, $LogSessions, $ShowCommentWindow) 
-    : base ($ID, $Name) 
-    {
-       $this.Permissions = $Permissions
-       $this.Active = $Active
-       $this.ShowCommentWindow = $ShowCommentWindow
-       $this.LogSessions = $LogSessions
-    }
-
-}
-
-Class TVAccount : TVUserBase
-{
-    [string] $Email
-    [string] $CompanyName
-
-    TVAccount ( [string] $ID, [string] $Name, [string] $Email, [string] $CompanyName) 
-    : base ($ID, $Name)
-    {
-        $this.Email = $Email
-        $this.CompanyName = $CompanyName
-    }
-
-}
-
-Class TVGroupUser : TVUserBase
-{
-    [string] $Permissions = [string]::Empty
-    [bool] $Pending = $false
-    
-    TVGroupUser ( $ID, $Name, $Permissions, $Pending) 
-    : base ( $ID, $Name) 
-    {
-        $this.Permissions = $Permissions
-        $this.Pending = $Pending
-    }
-    
-    TVGroupUser ( $ID, $Name, $Permissions) 
-    : base ( $ID, $Name) 
-    {
-        $this.Permissions = $Permissions
-    }
-
-}
-
-
-Class TVGroup 
-{
-    [ValidateNotNullOrEmpty()][string]$ID
-    [ValidateNotNullOrEmpty()][string]$Name
-    [TVUserBase] $Owner
-    [ValidateNotNullOrEmpty()][string]$Permissions
-    [ValidateNotNullOrEmpty()][string]$PolicyID
-    [TVGroupUser[]] $SharedWith
-          
-    TVGroup ( [string] $ID, [string] $Name, [TVUserBase] $Owner, [string] $Permissions, [TVGroupUser[]] $SharedWith)
-    {
-        
-        $this.ID = $ID
-        $this.Name = $Name
-        $this.Owner = $Owner
-        $this.Permissions = $Permissions
-        $this.SharedWith = $SharedWith
-
-    }
-
-}
-
-Class TVDevice
-{
-    [string] $RemoteControlID
-    [string] $DeviceID
-    [string] $Alias
-    [string] $GroupID
-    [string] $OnlineStatus
-    [bool] $AssignedTo
-    [string] $SupportedFeatures
-    
-    TVDevice ( [string] $RemoteControlID, [string] $DeviceID, [string] $Alias, [string] $GroupID, [string] $OnlineStatus, [bool] $AssignedTo, [string] $SupportedFeatures)
-    {
-        $this.Alias = $Alias
-        $this.AssignedTo = $AssignedTo
-        $this.DeviceID = $DeviceID
-        $this.GroupID = $GroupID
-        $this.OnlineStatus = $OnlineStatus
-        $this.RemoteControlID = $RemoteControlID
-        $this.SupportedFeatures = $SupportedFeatures
-    }
-    
-}
-#endregion
-    
-#region Helpers
-function Initialize-TVUserObject
-{
-    [CmdLetBinding()]
-    [OutputType([TVUser])]
-    param(
-        [Parameter(Mandatory = $true)]
-        [psobject] $Json
-    )
-
-    [string] $QuickSupportID = [System.String]::Empty
-    if( $Json.custom_quicksupport_id -ne $null)
-    {
-        $QuickSupportID = $Json.custom_quicksupport_id
-    }
-    
-    [string] $QuickJoinID = [System.String]::Empty
-    if( $Json.custom_quickjoin_id -ne $null)
-    {
-        $QuickJoinID = $Json.custom_quickjoin_id
-    }
-    
-    [string[]] $Permissions = $Json.permissions -split ','
-   
-    [TVUser] $TVUser = New-Object TVUser -ArgumentList $Json.id, $Json.name, $Permissions, $Json.active, $Json.log_sessions, $Json.show_comment_window, $QuickSupportID, $QuickJoinID
-
-    Write-Output -InputObject $TVUser
-    
-}
-#endregion Helpers
-
 
 
 #region Authorization
 
-#TODO: Not finished
-function Get-Authorization
+function Get-TVOAuth2Authorization
 {
     [CmdletBinding()]
     param(
+        [Parameter(
+            Mandatory = $true
+        )]
         [string] $ClientID,
-        [string]$RedirectURI
-
+        
+        [Parameter(
+            Mandatory = $false
+        )]
+        [string]$RedirectURI = [string]::Empty
     )
 
+    begin{
+        Add-Type -AssemblyName PresentationFramework
+        [string] $fmt_loginUtl = '{0}/oauth2/authorize?response_type=code&client_id={1}&redirect_url={2}&display=popup'
+        [string] $Url = $fmt_loginUtl -f $script:TVConfig.LoginUrl, $ClientID, $RedirectURI
+    }
+    
+    process
+    {
+        [System.Windows.Window] $Window = New-Object Windows.Window -Property @{Width=440;Height=640}
+        $Window.Title = 'TeamViewer oAuth2'
+        $window.WindowStartupLocation="CenterScreen" 
+        [System.Windows.Controls.Grid] $Grid = New-Object -TypeName System.Windows.Controls.Grid 
+        [System.Windows.Controls.WebBrowser] $Browser = New-Object -TypeName System.Windows.Controls.WebBrowser `
+                                                            -Property @{Source=($Url -f ($Scope -join "%20")) }
+        $Browser.HorizontalAlignment = [System.Windows.HorizontalAlignment]::Stretch
+        $Browser.VerticalAlignment = [System.Windows.VerticalAlignment]::Stretch
+        $Grid.AddChild($Browser)
+        $Window.Content = $Grid
+        [void]$window.ShowDialog() | Out-Null
+    }
 }
 
 <#
@@ -352,7 +380,8 @@ function Get-TVOauth2Token
         Write-Verbose -Message ('Got Status Code: "{0}" with message: "{1}".' -f $StatusCode, $StatusString)
 
         [System.IO.Stream] $ResponseStream = $Response.GetResponseStream()
-        [System.IO.StreamReader] $StreamReader = New-Object -TypeName System.IO.StreamReader -ArgumentList $ResponseStream
+        [System.IO.StreamReader] $StreamReader = New-Object -TypeName System.IO.StreamReader `
+                                                            -ArgumentList $ResponseStream
         [string] $Result = $StreamReader.ReadToEnd()
 
         if ( $StatusCode -ne 200)
@@ -396,29 +425,27 @@ function Get-TVAccount
         [Parameter()]
         [string] $Token = $script:TVConfig.AccessToken
     )
-    
     begin
     {
         if ( [string]::IsNullOrEmpty($Token) ) 
         {
             throw (New-Object -TypeName System.Exception -ArgumentList $script:TOKEN_MISSING_ERROR)
         }   
-    }
-    
+    }    
     process
     {
-
-        [string] $RequestUrl = ('{0}/api/{1}/account' -f $script:TVConfig.BaseUrl, $script:TVConfig.ApiVersion)
-        
-        $Response = Invoke-RestMethod -Uri $RequestUrl -Headers $script:TVConfig.Header -Body $RequestBody
-
-        [TVAccount] $Account = New-Object -TypeName TVAccount -ArgumentList $Response.userid, $Response.name, $Response.email, $Response.company_name
-
+        [string] $RequestUrl = ('{0}/api/{1}/account' -f $script:TVConfig.BaseUrl, $script:TVConfig.ApiVersion)        
+        $Response = Invoke-RestMethod -Uri $RequestUrl `
+                                      -Headers $script:TVConfig.Header `
+                                      -Body $RequestBody `
+                                      -Method 'Get'
+        [TVAccount] $Account = New-Object -TypeName TVAccount `
+                                          -ArgumentList $Response.userid, `
+                                                        $Response.name, `
+                                                        $Response.email, `
+                                                        $Response.company_name
         Write-Output -InputObject $Account
-
     }
-
-    end{}
 }
 #endregion Account
 
@@ -502,8 +529,7 @@ function New-TVUser
         Write-Verbose -Message ('Running Request URl: "{0}"' -f $RequestUrl)
         
         Try
-        {
-        
+        {        
             $response = Invoke-RestMethod -Method Post `
                                           -Uri $RequestUrl `
                                           -Headers $script:TVConfig.Header `
@@ -513,36 +539,36 @@ function New-TVUser
             # returns 204 on success                                          
             Write-Verbose -Message "Fetching..."
             Get-TVUser -Email $Email -Token $Token
-        
         }
         catch
         {           
             Write-Output $_
             #$ErrJsonoutWrite-Output $_.ErrorDetails.Message | convertFrom-json 
             #Write-Error -Message $ErrJson.error_description
-        
         }
-
     }
-
 }
 
 #TODO: User or company access token. Scope: Users.ModifyUsers or Users.ModifyAdministrators.
 function Set-TVUser
 {
-
     [CmdletBinding()]
     [OutputType([TVUser])]   
     param(
 
         [Parameter()]
         [string] $Token = $script:TVConfig.AccessToken,
- 
-        [Parameter(Mandatory = $true, ParameterSetName = 'ByIdentity', ValueFromPipeline = $true)]
+
+        [Parameter(
+            Mandatory = $true, 
+            ParameterSetName = 'ByIdentity', 
+            ValueFromPipeline = $true)]
         [ValidateNotNull()]
         [TVUser] $Identity,
 
-        [Parameter(Mandatory = $true, ParameterSetName = 'ById')]
+        [Parameter(
+            Mandatory = $true, 
+            ParameterSetName = 'ById')]
         [string] $UserID,
 
         [Parameter()]
@@ -561,18 +587,24 @@ function Set-TVUser
                      'ViewAllAssets', 'ViewOwnAssets', 'EditAllCustomModuleConfigs', 'EditOwnCustomModuleConfigs')]
         [string[]] $Permissions = $null,
         
-        [Parameter(Mandatory = $false)]
+        [Parameter(
+            Mandatory = $false
+        )]
         [ValidateNotNullOrEmpty()]
         [string] $Password = $null,
         
         [Parameter()]
         [bool] $Active,
         
-        [Parameter(Mandatory = $false)]
+        [Parameter(
+            Mandatory = $false
+        )]
         [ValidateNotNullOrEmpty()]
         [string] $QuickJoinID = $null,
         
-        [Parameter(Mandatory = $false)]
+        [Parameter(
+            Mandatory = $false
+        )]
         [ValidateNotNullOrEmpty()]
         [string] $QuickSupportID = $null
     )
@@ -636,7 +668,6 @@ function Set-TVUser
         }
 
         Write-Verbose -Message ('Running Request URl: "{0}"' -f $RequestUrl)
-        #Write-Output -InputObject $Params
 
         Try
         {
@@ -660,8 +691,6 @@ function Set-TVUser
             Write-Error -Message $ErrJson.error_description
             #.Message.error_description
         }
-        
-
         
     }
     end{}
