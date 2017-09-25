@@ -72,7 +72,7 @@ FormatsToProcess = 'PSTeamViewer.format.ps1xml'
 FunctionsToExport = @(
                     'Initialize-TVAPI', 
                     'Test-TVToken', 
-                    'Get-TVOauth2Token', 
+                    'Get-TVOauth2Token', 'Get-TVOAuth2Authorization'
                     'Get-TVAccount', 
                     'Get-TVUser', 'Set-TVUser', 'New-TVUser', 
                     'Get-TVGroup', 'New-TVGroup', 'Remove-TVGroup',
@@ -103,13 +103,13 @@ PrivateData = @{
     PSData = @{
 
         # Tags applied to this module. These help with module discovery in online galleries.
-        # Tags = @()
+        Tags = @('TeamViewer')
 
         # A URL to the license for this module.
-        # LicenseUri = ''
+        LicenseUri = 'https://github.com/Marcuzzo/PSTeamViewer/blob/master/LICENSE'
 
         # A URL to the main website for this project.
-        # ProjectUri = ''
+        ProjectUri = 'https://github.com/Marcuzzo/PSTeamViewer'
 
         # A URL to an icon representing this module.
         # IconUri = ''
