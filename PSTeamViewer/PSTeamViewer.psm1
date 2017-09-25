@@ -316,11 +316,23 @@ function Get-TVOAuth2Authorization
 }
 
 
+function Revoke-TVOauth2Token
+{
+    [OutputType([bool])]    
+    [CmdLetBinding()]
+    param(
+        [string] $Token
+    )
+
+
+}
+
 <#
     This function needs to be tested!!!
 #>
 function Get-TVOauth2Token
 {
+    [OutputType([TVToken])]    
     [CmdletBinding()]
     param(
 
@@ -381,7 +393,19 @@ function Get-TVOauth2Token
         $Request.Method = 'POST'
         $Request.ContentType = 'application/x-www-form-urlencoded'
     
-        [string] $Parameters = ('grant_type=authorization_code&code={0}&client_id={1}&client_secret={2}' -f $AuthorizationCode, $ClientID, $ClientSecret )
+        [string] $Parameters = ('client_id={0}&client_secret={1}' -f $ClientID, $ClientSecret )
+        
+        switch ( $PSCmdlet.ParameterSetName ){
+            'Grant' {
+                $Parameters += ('&grant_type=authorization_code&code={0}&redirect_uri={1}' -f $AuthorizationCode, $RedirectURI)
+            }
+            'RefreshToken' {
+                $Parameters += ('&grant_type=refresh_token&refresh_token={0}' -f $RefreshToken)
+            }
+            Default{
+                Write-Error -Message ('Unexpected ParameterSetname received: "{0}".' -f $PSCmdlet.ParameterSetName)
+            }
+        }
         
         Write-Verbose -Message ('Got Parameters: "{0}".' -f $Parameters)
         
@@ -414,8 +438,11 @@ function Get-TVOauth2Token
         }
 
         $jsonResponse = ConvertFrom-Json -InputObject $result 
-        Write-output $jsonResponse
         
+        [TVToken] $Token = New-Object -TypeName TVToken -ArgumentList $jsonResponse.access_token, $jsonResponse.token_type, $jsonResponse.refresh_token, $jsonResponse.expires_in
+
+        Write-Output -InputObject $Token
+
     }
     catch
     {
