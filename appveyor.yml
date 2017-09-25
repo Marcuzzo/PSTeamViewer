@@ -16,6 +16,7 @@ build: false
 
 test_script:
 # Test with native PS version
-  - ps: . .\Tests\appveyor.pester.ps1
+  - ps: . .\build.ps1
+#  - ps: . .\Tests\appveyor.pester.ps1
 # Finalize pass - collect and upload results
-  - ps: . .\Tests\appveyor.pester.ps1 -Finalize
+#  - ps: . .\Tests\appveyor.pester.ps1 -Finalize
