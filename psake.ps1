@@ -49,6 +49,6 @@ Task Init {
     $lines
     Set-Location $ProjectRoot
     "Build System Details:"
-    Get-Item ENV:
+    Get-Item ENV:APPVEYOR*
     "`n"
 }
