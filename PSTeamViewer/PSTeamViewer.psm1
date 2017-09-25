@@ -21,6 +21,32 @@
 
 #region Classes
 
+class TVToken{
+    [ValidateNotNullOrEmpty()][string] $Access
+    [ValidateNotNullOrEmpty()][string] $Type
+    [ValidateNotNullOrEmpty()][string] $Refresh
+    [ValidateNotNullOrEmpty()][int] $ExpiresIn
+    [System.DateTime] $ExpireTime
+    [bool] $Expired = $true
+    [System.Timers.Timer] $Timer = $null
+
+    TVToken($Access, $Type, $Refresh, $ExpiresIn){
+        $this.Expired = $false
+        $this.ExpireTime = (Get-Date).AddSeconds($ExpiresIn)
+        $this.Access = $Access
+        $this.ExpiresIn = $ExpiresIn
+        $this.Refresh = $Refresh
+        $this.Type = $Type
+        $this.Timer = New-Object -TypeName System.Timers.Timer -Property @{Interval=$ExpiresIn*1000;AutoReset=$false}
+        Register-ObjectEvent -InputObject $this.Timer -EventName 'Elapsed' -MessageData $this -Action {             
+            Write-Verbose -Message ('The Elapsed event was raised at {0}' -f $EventArgs.SignalTime)    
+            [TVToken] $token = $Event.MessageData
+            $token.Expired = $true
+        }
+        $this.Timer.Enabled = $true   
+    }
+ }
+
 class TVUserBase
 {
     [ValidateNotNullOrEmpty()][string]$ID
@@ -258,17 +284,13 @@ function Test-TVToken
 
 function Get-TVOAuth2Authorization
 {
-    [CmdletBinding()]
+    [CmdletBinding( PositionalBinding = $false ) ]
     param(
-        [Parameter(
-            Mandatory = $true
-        )]
+        [Parameter( Mandatory = $true )]
         [string] $ClientID,
         
-        [Parameter(
-            Mandatory = $false
-        )]
-        [string]$RedirectURI = [string]::Empty
+        [Parameter( Mandatory = $false )]
+        [string] $RedirectURI = [string]::Empty
     )
 
     begin{
@@ -289,9 +311,10 @@ function Get-TVOAuth2Authorization
         $Browser.VerticalAlignment = [System.Windows.VerticalAlignment]::Stretch
         $Grid.AddChild($Browser)
         $Window.Content = $Grid
-        [void]$window.ShowDialog() | Out-Null
+        $window.ShowDialog() | Out-Null
     }
 }
+
 
 <#
     This function needs to be tested!!!
@@ -387,26 +410,30 @@ function Get-TVOauth2Token
         if ( $StatusCode -ne 200)
         {
             # false
+            Write-Verbose -Message ( 'Status code {0}' -f $StatusCode)
         }
 
-        $jsonResponse = ConvertFrom-Json -InputObject $result -Type String    
+        $jsonResponse = ConvertFrom-Json -InputObject $result 
         Write-output $jsonResponse
         
     }
     catch
     {
-        Write-Host ("Token: Request failed! The error was '{0}'." -f $_)
-        $resstream = $_.Exception.InnerException.Response.GetResponseStream()
-        $sr = new-object System.IO.StreamReader $resstream
-        $value = $sr.ReadToEnd()
-		Write-Host $value
+        Write-Host ("Token: Request failed! The error was '{0}'" -f $_)
+        $_.Exception
+        #$resstream = $_.Exception.InnerException.Response.GetResponseStream()
+        #$sr = new-object System.IO.StreamReader $resstream
+        #$value = $sr.ReadToEnd()
+		#Write-Host $value
 
     }
     finally
     {
         if ($Response)
         {
+            Write-Verbose -Message ('Closing response')
             $Response.Close()
+            Write-Verbose -Message ('Response closed')
         }
         
     }
