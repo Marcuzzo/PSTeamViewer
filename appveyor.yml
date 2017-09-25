@@ -1,10 +1,7 @@
-# See http://www.appveyor.com/docs/appveyor-yml for many more options
 
-# Allow WMF5 (i.e. PowerShellGallery functionality)
 os: WMF 5
 
 # Skip on updates to the readme.
-# We can force this by adding [skip ci] or [ci skip] anywhere in commit message 
 skip_commits:
   message: /updated readme.*|update readme.*s/
 
@@ -15,8 +12,5 @@ install:
 build: false
 
 test_script:
-# Test with native PS version
   - ps: . .\build.ps1
-#  - ps: . .\Tests\appveyor.pester.ps1
-# Finalize pass - collect and upload results
-#  - ps: . .\Tests\appveyor.pester.ps1 -Finalize
+
