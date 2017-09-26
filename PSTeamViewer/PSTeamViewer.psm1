@@ -439,13 +439,17 @@ function Get-TVOauth2Token
         {
             # false
             Write-Verbose -Message ( 'Status code {0}' -f $StatusCode)
+            
         }
+        else
+        {
+            $jsonResponse = ConvertFrom-Json -InputObject $result 
+            
+            [TVToken] $Token = New-Object -TypeName TVToken -ArgumentList $jsonResponse.access_token, $jsonResponse.token_type, $jsonResponse.refresh_token, $jsonResponse.expires_in
+    
+            Write-Output -InputObject $Token
 
-        $jsonResponse = ConvertFrom-Json -InputObject $result 
-        
-        [TVToken] $Token = New-Object -TypeName TVToken -ArgumentList $jsonResponse.access_token, $jsonResponse.token_type, $jsonResponse.refresh_token, $jsonResponse.expires_in
-
-        Write-Output -InputObject $Token
+        }       
 
     }
     catch
