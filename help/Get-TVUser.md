@@ -14,27 +14,27 @@ Get Teamviewer User
 
 ### All (Default)
 ```
-Get-TVUser [-Token <String>] [-Simple]
+Get-TVUser [-Token <String>] [-Simple] [<CommonParameters>]
 ```
 
 ### ByID
 ```
-Get-TVUser [-Token <String>] -UserID <String[]> [-Simple]
+Get-TVUser [-Token <String>] -UserID <String[]> [-Simple] [<CommonParameters>]
 ```
 
 ### ByName
 ```
-Get-TVUser [-Token <String>] -Name <String> [-Simple]
+Get-TVUser [-Token <String>] -Name <String> [-Simple] [<CommonParameters>]
 ```
 
 ### ByEmail
 ```
-Get-TVUser [-Token <String>] -Email <String[]> [-Simple]
+Get-TVUser [-Token <String>] -Email <String[]> [-Simple] [<CommonParameters>]
 ```
 
 ### ByPermission
 ```
-Get-TVUser [-Token <String>] -Permission <String[]> [-Simple]
+Get-TVUser [-Token <String>] -Permission <String[]> [-Simple] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -138,6 +138,9 @@ Default value: False
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
+
+### CommonParameters
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 

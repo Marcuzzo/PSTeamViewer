@@ -15,11 +15,12 @@ schema: 2.0.0
 ### Grant
 ```
 Get-TVOauth2Token -AuthorizationCode <String> [-RedirectURI <String>] -ClientID <String> -ClientSecret <String>
+ [<CommonParameters>]
 ```
 
 ### RefreshToken
 ```
-Get-TVOauth2Token -RefreshToken <String> -ClientID <String> -ClientSecret <String>
+Get-TVOauth2Token -RefreshToken <String> -ClientID <String> -ClientSecret <String> [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -111,10 +112,12 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### CommonParameters
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
+
 ## INPUTS
 
 ### None
-
 
 ## OUTPUTS
 
