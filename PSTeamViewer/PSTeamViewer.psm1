@@ -396,15 +396,19 @@ function Get-TVOauth2Token
         [string] $Parameters = ('client_id={0}&client_secret={1}' -f $ClientID, $ClientSecret )
         
         switch ( $PSCmdlet.ParameterSetName ){
+            
             'Grant' {
                 $Parameters += ('&grant_type=authorization_code&code={0}&redirect_uri={1}' -f $AuthorizationCode, $RedirectURI)
             }
+            
             'RefreshToken' {
                 $Parameters += ('&grant_type=refresh_token&refresh_token={0}' -f $RefreshToken)
             }
+            
             Default{
                 Write-Error -Message ('Unexpected ParameterSetname received: "{0}".' -f $PSCmdlet.ParameterSetName)
             }
+
         }
         
         Write-Verbose -Message ('Got Parameters: "{0}".' -f $Parameters)
