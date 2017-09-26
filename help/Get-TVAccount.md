@@ -8,7 +8,7 @@ schema: 2.0.0
 # Get-TVAccount
 
 ## SYNOPSIS
-{{Fill in the Synopsis}}
+Get information about the current account.
 
 ## SYNTAX
 
@@ -17,21 +17,29 @@ Get-TVAccount [[-Token] <String>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-{{Fill in the Description}}
+Retreives properties about the current account that made the API request.
 
 ## EXAMPLES
 
 ### Example 1
 ```
-PS C:\> {{ Add example code here }}
+PS C:\> Get-TVAccount
 ```
 
-{{ Add example description here }}
+Get the account details.
+Note that an Initialize-TVAPI call is needed for this command to work without the Token Parameter.
+
+### Example 2
+```
+PS C:\> Get-TVAccount -Token "TOKEN123"
+```
+
+Get the account details using a token.
 
 ## PARAMETERS
 
 ### -Token
-{{Fill Token Description}}
+The Access token for the TeamViewer API.
 
 ```yaml
 Type: String
@@ -57,6 +65,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ### TVAccount
 
 ## NOTES
+author: Marco Micozzi
 
 ## RELATED LINKS
 

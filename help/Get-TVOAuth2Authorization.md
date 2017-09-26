@@ -5,65 +5,48 @@ online version:
 schema: 2.0.0
 ---
 
-# Get-TVDevice
+# Get-TVOAuth2Authorization
 
 ## SYNOPSIS
-Get devices.
+{{Fill in the Synopsis}}
 
 ## SYNTAX
 
 ```
-Get-TVDevice [[-Token] <String>] [[-OnlineState] <String>] [[-GroupID] <String>] [[-RemoteControlID] <String>]
- [<CommonParameters>]
+Get-TVOAuth2Authorization -ClientID <String> [-RedirectURI <String>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-Fetches devices from the TeamViewer API.
+{{Fill in the Description}}
 
 ## EXAMPLES
 
 ### Example 1
 ```
-PS C:\> Get-TVDevice
+PS C:\> {{ Add example code here }}
 ```
 
 {{ Add example description here }}
 
 ## PARAMETERS
 
-### -GroupID
-{{Fill GroupID Description}}
+### -ClientID
+{{Fill ClientID Description}}
 
 ```yaml
 Type: String
 Parameter Sets: (All)
 Aliases: 
 
-Required: False
-Position: 2
+Required: True
+Position: Named
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -OnlineState
-{{Fill OnlineState Description}}
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases: 
-Accepted values: Online, Offline
-
-Required: False
-Position: 1
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -RemoteControlID
-{{Fill RemoteControlID Description}}
+### -RedirectURI
+{{Fill RedirectURI Description}}
 
 ```yaml
 Type: String
@@ -71,22 +54,7 @@ Parameter Sets: (All)
 Aliases: 
 
 Required: False
-Position: 3
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Token
-{{Fill Token Description}}
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases: 
-
-Required: False
-Position: 0
+Position: Named
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -101,7 +69,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## OUTPUTS
 
-### TVDevice[]
+### System.Object
 
 ## NOTES
 
