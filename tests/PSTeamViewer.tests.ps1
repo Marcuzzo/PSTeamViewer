@@ -10,8 +10,6 @@ Import-Module "$PSScriptRoot\..\PSTeamViewer\PSTeamViewer.psd1" -Force
 
 InModuleScope PSTeamViewer {
 
-
-
     Describe "Initialize-TeamViewerAPI" {
 
         Mock -CommandName Invoke-RestMethod -Verifiable -MockWith {   
@@ -103,7 +101,7 @@ InModuleScope PSTeamViewer {
         }
         
         # When Set-TVUser call's Get-TVUser it will return an object wtith the same data...
-        Context 'Set-TVUser' {                
+        Context 'Set-TVUser' {                  
             It 'Updating TeamViewer user' {                            
                 $TVUser = Set-TVUser -UserID 'u1111111' -Name 'Lastname, Firstname' -Token "ABC123"                   
                 $TVUser.GetType().Name | should be 'TVUser'
