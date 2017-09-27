@@ -1,10 +1,17 @@
+Task default -Depends Deploy
+
 Properties {
-  # Find the build folder based on build system
-      $ProjectRoot = $ENV:APPVEYOR_BUILD_FOLDER
-      if(-not $ProjectRoot)
-      {
-          $ProjectRoot = $PSScriptRoot
-      }
+  
+    $ProjectRoot = $ENV:APPVEYOR_BUILD_FOLDER
+    if( ( -not $ProjectRoot ) ) 
+    {
+        [ValidateNotNullOrEmpty()]$ProjectRoot = $Psake.build_script_dir 
+    }
+
+    $ProjectName = $ENV:APPVEYOR_PROJECT_NAME
+    if(-not $ProjectName) { 
+        [ValidateNotNullOrEmpty()]$ProjectName = (Get-ChildItem -Include *.psd1 -Recurse)[0].BaseName
+    }
 
   $Timestamp = Get-date -uformat "%Y%m%d-%H%M%S"
   $PSVersion = $PSVersionTable.PSVersion.Major
@@ -21,29 +28,8 @@ Properties {
 }
 
 
-Task default -Depends Deploy
-
-Task Deploy -Depends Test {
-   "Deploying..."
- }
-
-Task Test -Depends Init{
-
-  $lines
-  "`n`tSTATUS: Testing with PowerShell $PSVersion"
-  $TestResults = Invoke-Pester -Path $ProjectRoot\Tests -PassThru -OutputFormat NUnitXml -OutputFile "$ProjectRoot\$TestFile"
-
-  (New-Object 'System.Net.WebClient').UploadFile( "https://ci.appveyor.com/api/testresults/nunit/$($env:APPVEYOR_JOB_ID)", "$ProjectRoot\$TestFile" )
-
-  Remove-Item "$ProjectRoot\$TestFile" -Force -ErrorAction SilentlyContinue
 
 
-    if($TestResults.FailedCount -gt 0)
-    {
-        Write-Error "Failed '$($TestResults.FailedCount)' tests, build failed"
-    }
-    "`n"
-}
 
 Task Init {
     $lines
@@ -51,4 +37,59 @@ Task Init {
     "Build System Details:"
     Get-Item ENV:APPVEYOR*
     "`n"
+}
+
+Task Analyze -depends Init {    
+    "$lines`n`n`tSTATUS: Scanning for PSScriptAnalyzer Errors"
+
+    $ScanResults = Invoke-ScriptAnalyzer -Path "$ProjectRoot\$ProjectName" -Recurse -Severity Error
+
+    If ($ScanResults.count -gt 0)
+    {
+        Throw "Failed PSScriptAnalyzer Tests"
+    }
+}
+
+Task Help -depends Analyze {
+    "$lines`n`n`tSTATUS: Building Module Help"
+    Import-Module "$ProjectRoot\$ProjectName\$ProjectName.psd1"	-Force
+
+    Try
+    {
+          New-ExternalHelp 'docs\Commands' -OutputPath "$ProjectName\en-US" -Force -ErrorAction Stop
+          Import-Module "$ProjectRoot\$ProjectName\$ProjectName.psd1" -Force
+    }
+    Catch
+    {
+        Throw
+    }        
+
+
+}
+
+
+Task Test -Depends Help {
+    $lines
+    "`n`tSTATUS: Testing with PowerShell $PSVersion"
+    $TestResults = Invoke-Pester -Path $ProjectRoot\Tests -PassThru -OutputFormat NUnitXml -OutputFile "$ProjectRoot\$TestFile"
+  
+    if ( $env:APPVEYOR_JOB_ID )
+    {
+        (New-Object 'System.Net.WebClient').UploadFile( "https://ci.appveyor.com/api/testresults/nunit/$($env:APPVEYOR_JOB_ID)", "$ProjectRoot\$TestFile" )
+    }
+  
+    Remove-Item "$ProjectRoot\$TestFile" -Force -ErrorAction SilentlyContinue
+  
+    if($TestResults.FailedCount -gt 0)
+    {
+        Write-Error "Failed '$($TestResults.FailedCount)' tests, build failed"
+    }
+    "`n"
+}
+
+
+
+Task Deploy -Depends Test {
+    # 
+     "Deploying..."
 }
