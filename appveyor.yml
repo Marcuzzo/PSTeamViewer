@@ -1,14 +1,9 @@
-#
-#
-#
+version: 1.0.{build}
 os: WMF 5
 
 # Skip on updates to the readme.
 skip_commits:
   message: /updated readme.*|update readme.*s/
-
-install:
-  - cinst pester -y
 
 build: false
 
