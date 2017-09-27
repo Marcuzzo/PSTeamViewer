@@ -35,7 +35,7 @@ function Resolve-Module
             else
             {
                 Write-Verbose -Message "$($ModuleName) Missing, installing Module"
-                Install-Module -Name $ModuleName -Force
+                Install-Module -Name $ModuleName -Force -SkipPublisherCheck
                 Import-Module -Name $ModuleName -Force -RequiredVersion $Version
             }
         }
