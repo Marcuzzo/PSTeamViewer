@@ -23,7 +23,7 @@ function Resolve-Module
                     if ((Get-PSRepository -Name PSGallery).InstallationPolicy -ne 'Trusted') { Set-PSRepository -Name PSGallery -InstallationPolicy Trusted }
 
                     Write-Verbose -Message "$($ModuleName) Installed Version [$($Version.tostring())] is outdated. Installing Gallery Version [$($GalleryVersion.tostring())]"
-                    Install-Module -Name $ModuleName -Force
+                    Install-Module -Name $ModuleName -Force -SkipPublisherCheck
                     Import-Module -Name $ModuleName -Force -RequiredVersion $GalleryVersion
                 }
                 else
@@ -45,7 +45,7 @@ function Resolve-Module
 # Grab nuget bits, install modules, set build variables, start build.
 Get-PackageProvider -Name NuGet -ForceBootstrap | Out-Null
 
-Resolve-Module Psake, Pester
+Resolve-Module Psake, Pester, PSScriptAnalyzer, platyPS -Verbose
 
 
 Invoke-psake .\psake.ps1
