@@ -4,7 +4,7 @@ theme: readthedocs
 pages:
 - Home: index.md
 - Getting Started: Introduction.md
-- Commands:
+- CmdLets:
     - Initialize-TVAPI: cmdlets/Initialize-TVAPI.md
     - Test-TVToken: cmdlets/Test-TVToken.md
     - Get-TVOauth2Token: cmdlets/Get-TVOauth2Token.md
