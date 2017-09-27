@@ -541,7 +541,7 @@ function New-TVUser
           [string] $Email,
 
           [Parameter(Mandatory = $true, HelpMessage = 'The password of the user to create.')]
-          [string]$Password,
+          [securestring]$Password,
 
           [Parameter(Mandatory = $false)]
           [ValidateSet('en', 'nl', 'fr', 'es')]
@@ -572,7 +572,7 @@ function New-TVUser
         [hashtable] $Params = @{
             name = $Name
             email = $Email
-            password = $Password
+            password =  (New-Object PSCredential "user",$Password).GetNetworkCredential().Password
             language = $Language
         }  
 
@@ -653,7 +653,7 @@ function Set-TVUser
             Mandatory = $false
         )]
         [ValidateNotNullOrEmpty()]
-        [string] $Password = $null,
+        [securestring] $Password = $null,
         
         [Parameter()]
         [bool] $Active,
@@ -700,7 +700,7 @@ function Set-TVUser
 
         if ( -not ( [string]::IsNullOrEmpty($Password)))
         {
-            $Params.password = $Password
+            $Params.password =  (New-Object PSCredential "user",$Password).GetNetworkCredential().Password
         }
 
         if ( -not ( [string]::IsNullOrEmpty($Email)))
