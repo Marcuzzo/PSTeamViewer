@@ -16,7 +16,7 @@ if(-not $PSScriptRoot)
     $PSScriptRoot = Split-Path $MyInvocation.MyCommand.Path -Parent
 }
 
-[string] $Script:HelpDirectory = "$PSScriptRoot/../docs/commands/"
+[string] $Script:HelpDirectory = "$PSScriptRoot/../docs/cmdlets/"
 [string] $Script:OutputDirectory = "$PSScriptRoot/../PSTeamViewer/en-US/"
 #endregion
 

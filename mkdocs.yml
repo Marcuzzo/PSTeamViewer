@@ -1,0 +1,19 @@
+site_name: PSTeamViewer Documentation
+repo_url: https://github.com/Marcuzzo/PSTeamViewer
+theme: readthedocs
+pages:
+- Home: index.md
+- Getting Started: Introduction.md
+- Commands:
+    - Initialize-TVAPI: cmdlets/Initialize-TVAPI.md
+    - Test-TVToken: cmdlets/Test-TVToken.md
+    - Get-TVOauth2Token: cmdlets/Get-TVOauth2Token.md
+    - Get-TVOAuth2Authorization: cmdlets/Get-TVOAuth2Authorization.md
+    - Get-TVAccount: cmdlets/Get-TVAccount.md    
+    - Get-TVUser: cmdlets/Get-TVUser.md
+    - Set-TVUser: cmdlets/Set-TVUser.md
+    - New-TVUser: cmdlets/New-TVUser.md
+    - Get-TVDevice: cmdlets/Get-TVDevice.md
+    - Get-TVGroup: cmdlets/Get-TVGroup.md
+    - New-TVGroup: cmdlets/New-TVGroup.md
+    - Remove-TVGroup: cmdlets/Remove-TVGroup.md

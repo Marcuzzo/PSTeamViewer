@@ -15,13 +15,13 @@ schema: 2.0.0
 ### ByIdentity
 ```
 Set-TVUser [-Token <String>] -Identity <TVUser> [-Name <String>] [-Email <String>] [-Permissions <String[]>]
- [-Password <String>] [-Active <Boolean>] [-QuickJoinID <String>] [-QuickSupportID <String>]
+ [-Password <SecureString>] [-Active <Boolean>] [-QuickJoinID <String>] [-QuickSupportID <String>]
 ```
 
 ### ById
 ```
 Set-TVUser [-Token <String>] -UserID <String> [-Name <String>] [-Email <String>] [-Permissions <String[]>]
- [-Password <String>] [-Active <Boolean>] [-QuickJoinID <String>] [-QuickSupportID <String>]
+ [-Password <SecureString>] [-Active <Boolean>] [-QuickJoinID <String>] [-QuickSupportID <String>]
 ```
 
 ## DESCRIPTION
@@ -102,7 +102,7 @@ Accept wildcard characters: False
 {{Fill Password Description}}
 
 ```yaml
-Type: String
+Type: SecureString
 Parameter Sets: (All)
 Aliases: 
 

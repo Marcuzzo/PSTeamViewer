@@ -13,7 +13,7 @@ schema: 2.0.0
 ## SYNTAX
 
 ```
-New-TVUser [-Token <String>] -Name <String> -Email <String> -Password <String> [-Language <String>]
+New-TVUser [-Token <String>] -Name <String> -Email <String> -Password <SecureString> [-Language <String>]
  [-QuickSupportID <String>] [-QuickJoinID <String>]
 ```
 
@@ -81,7 +81,7 @@ Accept wildcard characters: False
 The password of the user to create.
 
 ```yaml
-Type: String
+Type: SecureString
 Parameter Sets: (All)
 Aliases: 
 
