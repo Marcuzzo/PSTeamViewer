@@ -15,19 +15,16 @@ schema: 2.0.0
 ### ByInputObject
 ```
 Remove-TVGroup [-Token <String>] -InputObject <TVGroup> [-CompanyUserID <String>] [-WhatIf] [-Confirm]
- [<CommonParameters>]
 ```
 
 ### ByName
 ```
 Remove-TVGroup [-Token <String>] -Name <String> [-CompanyUserID <String>] [-WhatIf] [-Confirm]
- [<CommonParameters>]
 ```
 
 ### ByID
 ```
 Remove-TVGroup [-Token <String>] -GroupID <String> [-CompanyUserID <String>] [-WhatIf] [-Confirm]
- [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -149,9 +146,6 @@ Default value: False
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
-
-### CommonParameters
-This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 
