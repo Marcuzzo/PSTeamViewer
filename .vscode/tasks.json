@@ -52,13 +52,9 @@
                 "isDefault": true
             },
             "args": [
-                "Write-Host -Object ('Current Location: {0}' -f (Get-Location));",         
-                "Push-Location PSTeamViewer;",                       
-                "Import-Module ./PSTeamViewer.psd1 -Force;",
-                "Pop-Location;",
-                "Update-MarkdownHelp -Path .\\help;",                                                   
-                "Remove-Module PSTeamViewer;",
-                "New-ExternalHelp -Path .\\help -OutputPath .\\PSTeamViewer\\en-US\\ -Force"
+                "Write-Host -Object 'Building Help';",
+                "./build/build.help.ps1 -Compile;",
+                "Write-Host -Object 'Help built';"
             ],
             "suppressTaskName": true
 
