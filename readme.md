@@ -1,4 +1,6 @@
 [![Build status](https://ci.appveyor.com/api/projects/status/1n8li43y0b2aydru?svg=true)](https://ci.appveyor.com/project/Marcuzzo/psteamviewer)
+[![Documentation Status](https://readthedocs.org/projects/psteamviewer/badge/?version=latest)](http://psteamviewer.readthedocs.io/en/latest/?badge=latest)
+
 
 # TeamViewer Powershell Module
 This is a PowerShell module API wrapper for the [TeamViewer API](https://integrate.teamviewer.com/en/develop/api/).
