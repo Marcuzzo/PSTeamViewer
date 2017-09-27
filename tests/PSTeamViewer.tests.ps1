@@ -111,14 +111,15 @@ InModuleScope PSTeamViewer {
         }
 
         Context 'New-TVUser' {
+            [securestring] $PassWd = ConvertTo-SecureString "P@ssW0rD!" -AsPlainText -Force
             It 'Test invalid Email address 1' {
-                { New-TVUser -Name 'TEST USER' -Email 'faulty@mail' -Password 'P@ssw0rd' -Language 'en' } | Should throw "faulty@mail is  not a valid email address"                    
+                { New-TVUser -Name 'TEST USER' -Email 'faulty@mail' -Password $PassWd -Language 'en' } | Should throw "faulty@mail is  not a valid email address"                    
             }
             It 'Test invalid Email address 2' {
-                { New-TVUser -Name 'TEST USER' -Email 'faultymail' -Password 'P@ssw0rd' -Language 'en' } | Should throw "faultymail is  not a valid email address"                    
+                { New-TVUser -Name 'TEST USER' -Email 'faultymail' -Password $PassWd -Language 'en' } | Should throw "faultymail is  not a valid email address"                    
             }                
             It 'Creates a new user' {
-                [TVUser] $TVUser = New-TVUser -Name 'TEST USER' -Email 'Some@mail.com' -Password 'P@ssw0rd' -Language 'en' -Token "ABC123"
+                [TVUser] $TVUser = New-TVUser -Name 'TEST USER' -Email 'Some@mail.com' -Password $PassWd -Language 'en' -Token "ABC123"
                 Assert-MockCalled -CommandName Invoke-RestMethod -ModuleName PSTeamviewer             
             }
 
