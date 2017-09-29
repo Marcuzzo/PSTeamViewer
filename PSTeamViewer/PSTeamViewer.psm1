@@ -914,6 +914,48 @@ function Get-TVDevice
 
 }
 
+function Get-TVInstallDir
+{
+    [CmdletBinding()]
+    param()
+
+    $ProgramFilesX86 = @{$true=${env:ProgramFiles(x86)};$false=$env:ProgramFiles}[(${env:ProgramFiles(x86)} -ne $null)]
+    
+    "$ProgramFilesX86\TeamViewer\TeamViewer.exe" | ForEach-Object {
+        if ( Test-Path -Path $_ ) 
+        {
+            return $_
+        }
+        else
+        {
+            return $null
+        }
+    }
+}
+
+function Start-TVRemoteControl
+{
+    [CmdletBinding()]
+    param(
+
+        [Parameter(
+            Mandatory = $true
+        )]
+        [string] $RemoteControlID
+    )
+
+    $InstallDir = Get-TVInstallDir
+
+    if ( $InstallDir -ne $null )
+    {
+
+        Start-Process -FilePath $InstallDir -ArgumentList ('-i {0}' -f $RemoteControlID)
+        #Invoke-WebRequest -Uri ('https://start.teamviewer.com/device/{0}' -f $RemoteControlID)
+
+    }
+
+}
+
 #region Groups
 
 function Remove-TVGroup

@@ -76,7 +76,7 @@ FunctionsToExport = @(
                     'Get-TVAccount', 
                     'Get-TVUser', 'Set-TVUser', 'New-TVUser', 
                     'Get-TVGroup', 'New-TVGroup', 'Remove-TVGroup',
-                    'Get-TVDevice'
+                    'Get-TVDevice', 'Start-TVRemoteControl'
                     )
 
 # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.
