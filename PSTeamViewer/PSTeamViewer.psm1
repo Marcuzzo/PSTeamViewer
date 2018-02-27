@@ -234,14 +234,15 @@ function Initialize-TVAPI
     )
     begin
     {
-        if ( -not ( Test-TVToken -Token $Token )) 
+        [bool] $IsTokenValid = Test-TVToken -Token $Token
+        if ( -not ( $IsTokenValid )) 
         {
             throw (New-Object -TypeName System.Exception -ArgumentList $script:TOKEN_INVALID)            
         }
     }
     process
     {
-        $script:TVConfig.TokenValid = $true # because it would have thrown in 'begin' if not valid
+        $script:TVConfig.TokenValid = $IsTokenValid 
         $script:TVConfig.AccessToken = $Token
         $script:TVConfig.Header.Authorization = ($script:fmt_AuthBearer -f $Token)
     }    
