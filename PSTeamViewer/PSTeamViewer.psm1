@@ -280,7 +280,6 @@ function Test-TVToken
 }
 #endregion
 
-
 #region Authorization
 
 function Get-TVOAuth2Authorization
@@ -477,7 +476,6 @@ function Get-TVOauth2Token
 }
 
 #endregion Authorization
-
 
 #region Account
 function Get-TVAccount
@@ -845,9 +843,6 @@ function Get-TVUser
 
 #region Devices
 
-
-#endregion Devices
-
 function Get-TVDevice
 {
     [CmdletBinding()]
@@ -914,48 +909,7 @@ function Get-TVDevice
     }
 
 }
-
-function Get-TVInstallDir
-{
-    [CmdletBinding()]
-    param()
-
-    $ProgramFilesX86 = @{$true=${env:ProgramFiles(x86)};$false=$env:ProgramFiles}[(${env:ProgramFiles(x86)} -ne $null)]
-    
-    "$ProgramFilesX86\TeamViewer\TeamViewer.exe" | ForEach-Object {
-        if ( Test-Path -Path $_ ) 
-        {
-            return $_
-        }
-        else
-        {
-            return $null
-        }
-    }
-}
-
-function Start-TVRemoteControl
-{
-    [CmdletBinding()]
-    param(
-
-        [Parameter(
-            Mandatory = $true
-        )]
-        [string] $RemoteControlID
-    )
-
-    $InstallDir = Get-TVInstallDir
-
-    if ( $InstallDir -ne $null )
-    {
-
-        Start-Process -FilePath $InstallDir -ArgumentList ('-i {0}' -f $RemoteControlID)
-        #Invoke-WebRequest -Uri ('https://start.teamviewer.com/device/{0}' -f $RemoteControlID)
-
-    }
-
-}
+#endregion Devices
 
 #region Groups
 
@@ -1048,7 +1002,6 @@ function Remove-TVGroup
 
 function New-TVGroup
 {
-
     [CmdletBinding()]
     param(
 
@@ -1130,7 +1083,6 @@ function Get-TVGroup
             throw (New-Object -TypeName System.Exception -ArgumentList $script:TOKEN_MISSING_ERROR)
         }
 
-
         [string] $AdminParam = @{$true=('/users/{0}' -f $CompanyUserID);$false=[string]::Empty}[(!( [string]::IsNullOrEmpty($CompanyUserID)))]
         [string] $RequestUrl = ('{0}/api/{1}{2}/groups' -f $script:TVConfig.BaseUrl, $script:TVConfig.ApiVersion, $AdminParam)  
         
@@ -1174,4 +1126,49 @@ function Get-TVGroup
     }
     end {}
 }
+
 #endregion Groups
+
+#region Local
+function Get-TVInstallDir
+{
+    [CmdletBinding()]
+    param()
+
+    $ProgramFilesX86 = @{$true=${env:ProgramFiles(x86)};$false=$env:ProgramFiles}[(${env:ProgramFiles(x86)} -ne $null)]
+    
+    "$ProgramFilesX86\TeamViewer\TeamViewer.exe" | ForEach-Object {
+        if ( Test-Path -Path $_ ) 
+        {
+            return $_
+        }
+        else
+        {
+            return $null
+        }
+    }
+}
+function Start-TVRemoteControl
+{
+    [CmdletBinding()]
+    param(
+
+        [Parameter(
+            Mandatory = $true
+        )]
+        [string] $RemoteControlID
+    )
+
+    $InstallDir = Get-TVInstallDir
+
+    if ( $InstallDir -ne $null )
+    {
+
+        Start-Process -FilePath $InstallDir -ArgumentList ('-i {0}' -f $RemoteControlID)
+        #Invoke-WebRequest -Uri ('https://start.teamviewer.com/device/{0}' -f $RemoteControlID)
+
+    }
+
+}
+
+#endregion
