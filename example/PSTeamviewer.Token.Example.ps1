@@ -11,11 +11,12 @@ Import-Module "$PSScriptRoot\..\PSTeamViewer\PSTeamViewer.psd1"
 Initialize-TVAPI -Token $Token 
 
 # Get the Active Directory users based 
-Get-TVUser | ForEach-Object {
+Get-TVUser | Where-Object {  ( $_.name -notlike '*,*'  ) -and ( $_.active -eq $true) }| ForEach-Object {
 
+	$_
     # This obviously only works if the names in 
     # the TeamViewer management console is correct
-    Get-ADUser -Filter {Name -like "*$_*"} | Select-Object -Property Name, UserPrincipalName
+    # Get-ADUser -Filter {Name -like "*$_*"} | Select-Object -Property Name, UserPrincipalName
 
 }
 
