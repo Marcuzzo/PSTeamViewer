@@ -971,8 +971,7 @@ function Get-TVDevice
         [string] $OnlineState = [string]::Empty,
 
         [Parameter(Mandatory=$false)]
-        [string] $GroupID = [string]::Empty,
-    
+        [string] $GroupID = [string]::Empty,    
         
         [Parameter(Mandatory=$false)]
         [string] $RemoteControlID = [string]::Empty
