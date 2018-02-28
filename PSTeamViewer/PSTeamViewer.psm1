@@ -843,6 +843,120 @@ function Get-TVUser
 
 #region Devices
 
+function Set-TVDevice
+{
+    [CmdletBinding()]
+    [OutputType([TVDevice])]
+    param(
+        [Parameter( Position = 0 )]
+        [string] $Token = $script:TVConfig.AccessToken,
+
+        [Parameter( Mandatory = $true, Position = 1, ParameterSetName = 'ByDeviceIDPolicy' )]
+        [Parameter( Mandatory = $true, Position = 1, ParameterSetName = 'ByDeviceIDGroup' )]
+        [string] $DeviceID,
+
+        [Parameter( Mandatory = $true, Position = 1, ParameterSetName = 'ByInputObjectPolicy' )]
+        [Parameter(Mandatory = $true, Position = 1, ParameterSetName = 'ByInputObjectGroup' )]
+        [ValidateNotNull()]
+        [TVDevice] $InputObject,
+
+        [Parameter()]
+        [ValidateNotNullOrEmpty()]
+        [string] $Alias,
+
+        [Parameter()]
+        [ValidateNotNullOrEmpty()]
+        [string] $Description,
+
+        [Parameter()]
+        [ValidateNotNullOrEmpty()]
+        [string] $Passwd,
+
+        [Parameter(ParameterSetName = 'ByDeviceIDPolicy')]
+        [Parameter(ParameterSetName = 'ByInputObjectPolicy')]
+        [ValidateNotNullOrEmpty()]
+        [string] $PolicyID,
+
+        [Parameter(ParameterSetName = 'ByInputObjectGroup')]
+        [Parameter(ParameterSetName = 'ByDeviceIDGroup')]
+        [ValidateNotNullOrEmpty()]
+        [string] $GroupID,
+
+        [Parameter()]
+        [switch] $PassThru
+
+    )
+
+ 
+    
+    begin
+    {
+
+        # Make sure to have a token
+        if ( [string]::IsNullOrEmpty($Token) ) 
+        {
+            throw (New-Object -TypeName System.Exception -ArgumentList $script:TOKEN_MISSING_ERROR)
+        }
+
+        Write-Verbose -Message ('ParameterSet: {0}' -f $PSCmdlet.ParameterSetName)
+        
+        if ( $PSCmdlet.ParameterSetName -eq 'ById')
+        {
+            $InputObject = Get-TVDevice | Where-Object { $_.DeviceID -eq $DeviceID}
+        }
+    }
+    process
+    {
+        [string] $RequestUrl = ('{0}/api/{1}/devices/{2}' -f $script:TVConfig.BaseUrl, $script:TVConfig.ApiVersion, $InputObject.DeviceID)  
+    
+        [hashtable] $Params = @{}
+
+        if ( -not ( [string]::IsNullOrEmpty($Alias)))
+        {
+            $Params.alias = $Alias
+        }
+        
+        if ( -not ( [string]::IsNullOrEmpty($Description)))
+        {
+            $Params.description = $Description
+        }
+                    
+        if ( -not ( [string]::IsNullOrEmpty($Passwd)))
+        {
+            $Params.password = $Passwd
+        }
+                    
+        if ( -not ( [string]::IsNullOrEmpty($PolicyID)))
+        {
+            $Params.policy_id = $PolicyID
+        }
+                    
+        if ( -not ( [string]::IsNullOrEmpty($GroupID)))
+        {
+            $Params.groupid = $GroupID
+        }
+
+        
+        Try
+        {
+            $response = Invoke-RestMethod -Method Put `
+                                            -Uri $RequestUrl `
+                                            -Headers $script:TVConfig.Header `
+                                            -Body ( $Params | ConvertTo-Json ) `
+                                            -ContentType 'application/json' `
+                                            -ErrorVariable respError     
+
+            #Get-TVUser -UserID $Identity.ID -Token $Token
+    
+        }
+        catch
+        {           
+            $ErrJson = $_.ErrorDetails.Message | convertFrom-json 
+            Write-Error -Message $ErrJson.error_description
+        }
+    }
+}
+
 function Get-TVDevice
 {
     [CmdletBinding()]
