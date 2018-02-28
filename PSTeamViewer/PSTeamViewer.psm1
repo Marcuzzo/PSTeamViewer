@@ -759,14 +759,36 @@ function Set-TVUser
 
 function Get-TVUser 
 {
-<#
-    .Synopsis
-   Get Teamviewer User
+    <#
+    .SYNOPSIS
+    Get Teamviewer user(s)
+    
     .DESCRIPTION
-   Get Teamviewer User
+    Get the details of one or more users from the Teamviewer management portal
+    
+    .PARAMETER Token
+    The Teamviewer API token
+    
+    .PARAMETER UserID
+    The ID of the user on the Teamviewer portal
+    
+    .PARAMETER Name
+    The name of the user
+    
+    .PARAMETER Email
+    The email address of the user
+    
+    .PARAMETER Permission
+    Permissions assigned to a user
+    
+    .PARAMETER Simple
+    minimize the output of the CmdLet
+    
     .EXAMPLE
-   Get-TVUser -Verbose | Where-Object { $_.Active -eq $false }
-#>
+       Get-TVUser -Verbose | Where-Object { $_.Active -eq $false }
+     
+
+    #>
     [CmdletBinding(PositionalBinding=$false, DefaultParameterSetName="All")]
     [OutputType([TVUser[]])]    
     param(
@@ -959,6 +981,29 @@ function Set-TVDevice
 
 function Get-TVDevice
 {
+    <#
+    .SYNOPSIS
+    Get Device information fom the Teamviewer portal
+    
+    .DESCRIPTION
+    Get Device information fom the Teamviewer portal
+    
+    .PARAMETER Token
+    The API token generated on the portal
+    
+    .PARAMETER OnlineState
+    include online or offline devices
+    
+    .PARAMETER GroupID
+    Get all devices of a specific GroupID
+    
+    .PARAMETER RemoteControlID
+    Get the device with a specific RemotecontrolID
+    
+    .EXAMPLE
+    Get-TVDevice -OnlineState Online
+       
+    #>
     [CmdletBinding()]
     [OutputType([TVDevice[]])]
     param(
