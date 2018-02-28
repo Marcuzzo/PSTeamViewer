@@ -1,8 +1,9 @@
 Task default -Depends Deploy
 
 Properties {
-  
+    
     $ProjectRoot = $ENV:APPVEYOR_BUILD_FOLDER
+    
     if( ( -not $ProjectRoot ) ) 
     {
         [ValidateNotNullOrEmpty()]$ProjectRoot = $Psake.build_script_dir 
@@ -13,23 +14,17 @@ Properties {
         [ValidateNotNullOrEmpty()]$ProjectName = (Get-ChildItem -Include *.psd1 -Recurse)[0].BaseName
     }
 
-  $Timestamp = Get-date -uformat "%Y%m%d-%H%M%S"
-  $PSVersion = $PSVersionTable.PSVersion.Major
-  $TestFile = "TestResults_PS$PSVersion`_$TimeStamp.xml"
-  $lines = '----------------------------------------------------------------------'
-
-  $Verbose = @{}
-
-  $CommitMsg =  "$env:APPVEYOR_REPO_COMMIT_MESSAGE $env:APPVEYOR_REPO_COMMIT_MESSAGE_EXTENDED"
-  if($CommitMsg -match "!verbose")
-  {
-      $Verbose = @{Verbose = $True}
-  }
+    $Timestamp = Get-date -uformat "%Y%m%d-%H%M%S"
+    $PSVersion = $PSVersionTable.PSVersion.Major
+    $TestFile = "TestResults_PS$PSVersion`_$TimeStamp.xml"
+    $lines = '----------------------------------------------------------------------'
+    $Verbose = @{}
+    $CommitMsg =  "$env:APPVEYOR_REPO_COMMIT_MESSAGE $env:APPVEYOR_REPO_COMMIT_MESSAGE_EXTENDED"
+    if($CommitMsg -match "!verbose")
+    {
+        $Verbose = @{Verbose = $True}
+    }
 }
-
-
-
-
 
 Task Init {
     $lines
@@ -51,8 +46,12 @@ Task Analyze -depends Init {
 }
 
 Task Help -depends Analyze {
+    
     "$lines`n`n`tSTATUS: Building Module Help"
+    
     Import-Module "$ProjectRoot\$ProjectName\$ProjectName.psd1"	-Force
+
+    
 
     Try
     {
@@ -63,7 +62,6 @@ Task Help -depends Analyze {
     {
         Throw
     }        
-
 
 }
 
@@ -86,8 +84,6 @@ Task Test -Depends Help {
     }
     "`n"
 }
-
-
 
 Task Deploy -Depends Test {
     # 
