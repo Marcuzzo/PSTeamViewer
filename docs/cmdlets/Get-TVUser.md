@@ -1,48 +1,48 @@
 ---
 external help file: PSTeamViewer-help.xml
 Module Name: PSTeamViewer
-online version: 
+online version:
 schema: 2.0.0
 ---
 
 # Get-TVUser
 
 ## SYNOPSIS
-Get Teamviewer User
+Get Teamviewer user(s)
 
 ## SYNTAX
 
 ### All (Default)
 ```
-Get-TVUser [-Token <String>] [-Simple]
+Get-TVUser [-Token <String>] [-Simple] [<CommonParameters>]
 ```
 
 ### ByID
 ```
-Get-TVUser [-Token <String>] -UserID <String[]> [-Simple]
+Get-TVUser [-Token <String>] -UserID <String[]> [-Simple] [<CommonParameters>]
 ```
 
 ### ByName
 ```
-Get-TVUser [-Token <String>] -Name <String> [-Simple]
+Get-TVUser [-Token <String>] -Name <String> [-Simple] [<CommonParameters>]
 ```
 
 ### ByEmail
 ```
-Get-TVUser [-Token <String>] -Email <String[]> [-Simple]
+Get-TVUser [-Token <String>] -Email <String[]> [-Simple] [<CommonParameters>]
 ```
 
 ### ByPermission
 ```
-Get-TVUser [-Token <String>] -Permission <String[]> [-Simple]
+Get-TVUser [-Token <String>] -Permission <String[]> [-Simple] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-Get Teamviewer User
+Get the details of one or more users from the Teamviewer management portal
 
 ## EXAMPLES
 
-### -------------------------- EXAMPLE 1 --------------------------
+### EXAMPLE 1
 ```
 Get-TVUser -Verbose | Where-Object { $_.Active -eq $false }
 ```
@@ -50,12 +50,12 @@ Get-TVUser -Verbose | Where-Object { $_.Active -eq $false }
 ## PARAMETERS
 
 ### -Token
-{{Fill Token Description}}
+The Teamviewer API token
 
 ```yaml
 Type: String
 Parameter Sets: (All)
-Aliases: 
+Aliases:
 
 Required: False
 Position: Named
@@ -65,12 +65,12 @@ Accept wildcard characters: False
 ```
 
 ### -UserID
-{{Fill UserID Description}}
+The ID of the user on the Teamviewer portal
 
 ```yaml
 Type: String[]
 Parameter Sets: ByID
-Aliases: 
+Aliases:
 
 Required: True
 Position: Named
@@ -80,12 +80,12 @@ Accept wildcard characters: False
 ```
 
 ### -Name
-{{Fill Name Description}}
+The name of the user
 
 ```yaml
 Type: String
 Parameter Sets: ByName
-Aliases: 
+Aliases:
 
 Required: True
 Position: Named
@@ -95,12 +95,12 @@ Accept wildcard characters: False
 ```
 
 ### -Email
-{{Fill Email Description}}
+The email address of the user
 
 ```yaml
 Type: String[]
 Parameter Sets: ByEmail
-Aliases: 
+Aliases:
 
 Required: True
 Position: Named
@@ -110,12 +110,12 @@ Accept wildcard characters: False
 ```
 
 ### -Permission
-{{Fill Permission Description}}
+Permissions assigned to a user
 
 ```yaml
 Type: String[]
 Parameter Sets: ByPermission
-Aliases: 
+Aliases:
 
 Required: True
 Position: Named
@@ -125,12 +125,12 @@ Accept wildcard characters: False
 ```
 
 ### -Simple
-{{Fill Simple Description}}
+minimize the output of the CmdLet
 
 ```yaml
 Type: SwitchParameter
 Parameter Sets: (All)
-Aliases: 
+Aliases:
 
 Required: False
 Position: Named
@@ -138,6 +138,10 @@ Default value: False
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
+
+### CommonParameters
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable.
+For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 
@@ -148,4 +152,3 @@ Accept wildcard characters: False
 ## NOTES
 
 ## RELATED LINKS
-

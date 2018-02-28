@@ -1,7 +1,7 @@
 ---
 external help file: PSTeamViewer-help.xml
 Module Name: PSTeamViewer
-online version: 
+online version:
 schema: 2.0.0
 ---
 
@@ -15,11 +15,12 @@ schema: 2.0.0
 ### Grant
 ```
 Get-TVOauth2Token -AuthorizationCode <String> [-RedirectURI <String>] -ClientID <String> -ClientSecret <String>
+ [<CommonParameters>]
 ```
 
 ### RefreshToken
 ```
-Get-TVOauth2Token -RefreshToken <String> -ClientID <String> -ClientSecret <String>
+Get-TVOauth2Token -RefreshToken <String> -ClientID <String> -ClientSecret <String> [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -42,7 +43,7 @@ Authorization code acquired from the /oauth2/authorize page.
 ```yaml
 Type: String
 Parameter Sets: Grant
-Aliases: 
+Aliases:
 
 Required: True
 Position: Named
@@ -57,7 +58,7 @@ Client ID, a unique string that identifies the application.
 ```yaml
 Type: String
 Parameter Sets: (All)
-Aliases: 
+Aliases:
 
 Required: True
 Position: Named
@@ -72,7 +73,7 @@ Client ID, a unique string that identifies the application.
 ```yaml
 Type: String
 Parameter Sets: (All)
-Aliases: 
+Aliases:
 
 Required: True
 Position: Named
@@ -87,7 +88,7 @@ Must be the same value as in the previous call to /oauth2/authorize
 ```yaml
 Type: String
 Parameter Sets: Grant
-Aliases: 
+Aliases:
 
 Required: False
 Position: Named
@@ -102,7 +103,7 @@ Refresh-token from a previous call.
 ```yaml
 Type: String
 Parameter Sets: RefreshToken
-Aliases: 
+Aliases:
 
 Required: True
 Position: Named
@@ -110,6 +111,10 @@ Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
+
+### CommonParameters
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable.
+For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 
@@ -122,4 +127,3 @@ Accept wildcard characters: False
 ## NOTES
 
 ## RELATED LINKS
-

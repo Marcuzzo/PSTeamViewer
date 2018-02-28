@@ -1,7 +1,7 @@
 ---
 external help file: PSTeamViewer-help.xml
 Module Name: PSTeamViewer
-online version: 
+online version:
 schema: 2.0.0
 ---
 
@@ -15,16 +15,19 @@ schema: 2.0.0
 ### ByInputObject
 ```
 Remove-TVGroup [-Token <String>] -InputObject <TVGroup> [-CompanyUserID <String>] [-WhatIf] [-Confirm]
+ [<CommonParameters>]
 ```
 
 ### ByName
 ```
 Remove-TVGroup [-Token <String>] -Name <String> [-CompanyUserID <String>] [-WhatIf] [-Confirm]
+ [<CommonParameters>]
 ```
 
 ### ByID
 ```
 Remove-TVGroup [-Token <String>] -GroupID <String> [-CompanyUserID <String>] [-WhatIf] [-Confirm]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -47,7 +50,7 @@ PS C:\> {{ Add example code here }}
 ```yaml
 Type: String
 Parameter Sets: (All)
-Aliases: 
+Aliases:
 
 Required: False
 Position: Named
@@ -77,7 +80,7 @@ The Group ID of the group to delete.
 ```yaml
 Type: String
 Parameter Sets: ByID
-Aliases: 
+Aliases:
 
 Required: True
 Position: Named
@@ -92,7 +95,7 @@ Accept wildcard characters: False
 ```yaml
 Type: TVGroup
 Parameter Sets: ByInputObject
-Aliases: 
+Aliases:
 
 Required: True
 Position: Named
@@ -107,7 +110,7 @@ The name of the group to delete.
 ```yaml
 Type: String
 Parameter Sets: ByName
-Aliases: 
+Aliases:
 
 Required: True
 Position: Named
@@ -122,7 +125,7 @@ Accept wildcard characters: False
 ```yaml
 Type: String
 Parameter Sets: (All)
-Aliases: 
+Aliases:
 
 Required: False
 Position: Named
@@ -147,6 +150,10 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### CommonParameters
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable.
+For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
+
 ## INPUTS
 
 ### TVGroup
@@ -158,4 +165,3 @@ Accept wildcard characters: False
 ## NOTES
 
 ## RELATED LINKS
-

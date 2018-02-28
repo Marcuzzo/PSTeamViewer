@@ -1,99 +1,99 @@
 ---
 external help file: PSTeamViewer-help.xml
 Module Name: PSTeamViewer
-online version: 
+online version:
 schema: 2.0.0
 ---
 
 # Get-TVDevice
 
 ## SYNOPSIS
-Get devices.
+Get Device information fom the Teamviewer portal
 
 ## SYNTAX
 
 ```
 Get-TVDevice [[-Token] <String>] [[-OnlineState] <String>] [[-GroupID] <String>] [[-RemoteControlID] <String>]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-Fetches devices from the TeamViewer API.
+Get Device information fom the Teamviewer portal
 
 ## EXAMPLES
 
-### Example 1
+### EXAMPLE 1
 ```
-PS C:\> Get-TVDevice
+Get-TVDevice -OnlineState Online
 ```
-
-{{ Add example description here }}
 
 ## PARAMETERS
 
-### -GroupID
-{{Fill GroupID Description}}
+### -Token
+The API token generated on the portal
 
 ```yaml
 Type: String
 Parameter Sets: (All)
-Aliases: 
+Aliases:
 
 Required: False
-Position: 2
-Default value: None
+Position: 1
+Default value: $script:TVConfig.AccessToken
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
 ### -OnlineState
-{{Fill OnlineState Description}}
+include online or offline devices
 
 ```yaml
 Type: String
 Parameter Sets: (All)
-Aliases: 
-Accepted values: Online, Offline
+Aliases:
 
 Required: False
-Position: 1
-Default value: None
+Position: 2
+Default value: [string]::Empty
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -GroupID
+Get all devices of a specific GroupID
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: 3
+Default value: [string]::Empty
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
 ### -RemoteControlID
-{{Fill RemoteControlID Description}}
+Get the device with a specific RemotecontrolID
 
 ```yaml
 Type: String
 Parameter Sets: (All)
-Aliases: 
+Aliases:
 
 Required: False
-Position: 3
-Default value: None
+Position: 4
+Default value: [string]::Empty
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Token
-{{Fill Token Description}}
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases: 
-
-Required: False
-Position: 0
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
+### CommonParameters
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable.
+For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
-
-### None
 
 ## OUTPUTS
 
@@ -102,4 +102,3 @@ Accept wildcard characters: False
 ## NOTES
 
 ## RELATED LINKS
-

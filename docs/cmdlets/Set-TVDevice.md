@@ -5,16 +5,35 @@ online version:
 schema: 2.0.0
 ---
 
-# New-TVUser
+# Set-TVDevice
 
 ## SYNOPSIS
 {{Fill in the Synopsis}}
 
 ## SYNTAX
 
+### ByDeviceIDGroup
 ```
-New-TVUser [-Token <String>] -Name <String> -Email <String> -Password <SecureString> [-Language <String>]
- [-QuickSupportID <String>] [-QuickJoinID <String>] [<CommonParameters>]
+Set-TVDevice [[-Token] <String>] [-DeviceID] <String> [-Alias <String>] [-Description <String>]
+ [-Passwd <String>] [-GroupID <String>] [-PassThru] [<CommonParameters>]
+```
+
+### ByDeviceIDPolicy
+```
+Set-TVDevice [[-Token] <String>] [-DeviceID] <String> [-Alias <String>] [-Description <String>]
+ [-Passwd <String>] [-PolicyID <String>] [-PassThru] [<CommonParameters>]
+```
+
+### ByInputObjectGroup
+```
+Set-TVDevice [[-Token] <String>] [-InputObject] <TVDevice> [-Alias <String>] [-Description <String>]
+ [-Passwd <String>] [-GroupID <String>] [-PassThru] [<CommonParameters>]
+```
+
+### ByInputObjectPolicy
+```
+Set-TVDevice [[-Token] <String>] [-InputObject] <TVDevice> [-Alias <String>] [-Description <String>]
+ [-Passwd <String>] [-PolicyID <String>] [-PassThru] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -23,7 +42,7 @@ New-TVUser [-Token <String>] -Name <String> -Email <String> -Password <SecureStr
 ## EXAMPLES
 
 ### Example 1
-```
+```powershell
 PS C:\> {{ Add example code here }}
 ```
 
@@ -31,69 +50,8 @@ PS C:\> {{ Add example code here }}
 
 ## PARAMETERS
 
-### -Email
-The email address of the user to create.
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Language
-{{Fill Language Description}}
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-Accepted values: en, nl, fr, es
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Name
-The name of the user to create.
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Password
-The password of the user to create.
-
-```yaml
-Type: SecureString
-Parameter Sets: (All)
-Aliases:
-
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -QuickJoinID
-{{Fill QuickJoinID Description}}
+### -Alias
+{{Fill Alias Description}}
 
 ```yaml
 Type: String
@@ -107,12 +65,102 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -QuickSupportID
-{{Fill QuickSupportID Description}}
+### -Description
+{{Fill Description Description}}
 
 ```yaml
 Type: String
 Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -DeviceID
+{{Fill DeviceID Description}}
+
+```yaml
+Type: String
+Parameter Sets: ByDeviceIDGroup, ByDeviceIDPolicy
+Aliases:
+
+Required: True
+Position: 1
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -GroupID
+{{Fill GroupID Description}}
+
+```yaml
+Type: String
+Parameter Sets: ByDeviceIDGroup, ByInputObjectGroup
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -InputObject
+{{Fill InputObject Description}}
+
+```yaml
+Type: TVDevice
+Parameter Sets: ByInputObjectGroup, ByInputObjectPolicy
+Aliases:
+
+Required: True
+Position: 1
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -PassThru
+{{Fill PassThru Description}}
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Passwd
+{{Fill Passwd Description}}
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -PolicyID
+{{Fill PolicyID Description}}
+
+```yaml
+Type: String
+Parameter Sets: ByDeviceIDPolicy, ByInputObjectPolicy
 Aliases:
 
 Required: False
@@ -131,7 +179,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: Named
+Position: 0
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -145,9 +193,11 @@ For more information, see about_CommonParameters (http://go.microsoft.com/fwlink
 
 ### None
 
+
 ## OUTPUTS
 
-### TVUser
+### TVDevice
+
 
 ## NOTES
 
