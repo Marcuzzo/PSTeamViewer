@@ -757,14 +757,14 @@ function Set-TVUser
     end{}
 }
 
-function Get-TVUser
+function Get-TVUser 
 {
 <#
-.Synopsis
+    .Synopsis
    Get Teamviewer User
-.DESCRIPTION
+    .DESCRIPTION
    Get Teamviewer User
-.EXAMPLE
+    .EXAMPLE
    Get-TVUser -Verbose | Where-Object { $_.Active -eq $false }
 #>
     [CmdletBinding(PositionalBinding=$false, DefaultParameterSetName="All")]
