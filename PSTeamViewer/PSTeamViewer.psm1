@@ -1245,6 +1245,10 @@ function Get-TVGroup
 #region Local
 function Get-TVInstallDir
 {
+
+    <#
+    Get-Package -ProviderName Programs | Where-Object {$_.Name -like 'TeamViewer*'}
+    #>
     [CmdletBinding()]
     param()
 
