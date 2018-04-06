@@ -51,8 +51,6 @@ Task Help -depends Analyze {
     
     Import-Module "$ProjectRoot\$ProjectName\$ProjectName.psd1"	-Force
 
-    
-
     Try
     {
           New-ExternalHelp 'docs\cmdlets' -OutputPath "$ProjectName\en-US" -Force -ErrorAction Stop
