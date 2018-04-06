@@ -224,6 +224,23 @@ function Initialize-TVUserObject
 #region Initialization
 function Initialize-TVAPI
 {
+    <#
+    .SYNOPSIS
+    Initialize the TeamViewer API wrapper
+    
+    .DESCRIPTION
+    Initialize the TeamViewer API wrapper
+    
+    .PARAMETER Token
+    The API token created on the management portal
+    
+    .EXAMPLE
+    Initialize-TVAPI -Token "ABCD-1234"
+    Initialize the TeamViewer API with the token "ABCD-1234"
+    
+    .NOTES
+    Initializing the wrapper will allow all API call's to be made without having to specify the token in each call
+    #>
     [CmdletBinding()]
     [OutputType([bool])]
     param(
@@ -591,7 +608,7 @@ function New-TVUser
         
         Try
         {        
-            $response = Invoke-RestMethod -Method Post `
+            Invoke-RestMethod -Method Post `
                                           -Uri $RequestUrl `
                                           -Headers $script:TVConfig.Header `
                                           -Body ( $Params | ConvertTo-Json ) `
@@ -732,7 +749,8 @@ function Set-TVUser
 
         Try
         {
-            $response = Invoke-RestMethod -Method Put `
+            
+            Invoke-RestMethod -Method Put `
                                           -Uri $RequestUrl `
                                           -Headers $script:TVConfig.Header `
                                           -Body ( $Params | ConvertTo-Json ) `
@@ -785,8 +803,7 @@ function Get-TVUser
     minimize the output of the CmdLet
     
     .EXAMPLE
-       Get-TVUser -Verbose | Where-Object { $_.Active -eq $false }
-     
+       Get-TVUser -Verbose | Where-Object { $_.Active -eq $false }  
 
     #>
     [CmdletBinding(PositionalBinding=$false, DefaultParameterSetName="All")]
@@ -961,7 +978,7 @@ function Set-TVDevice
         
         Try
         {
-            $response = Invoke-RestMethod -Method Put `
+            Invoke-RestMethod -Method Put `
                                             -Uri $RequestUrl `
                                             -Headers $script:TVConfig.Header `
                                             -Body ( $Params | ConvertTo-Json ) `
@@ -1140,7 +1157,7 @@ function Remove-TVGroup
                    
         Try{
             if ( $PSCmdlet.ShouldProcess($InputObject.Name, 'Remove Group') ){
-                $response = Invoke-RestMethod -Method Delete `
+                Invoke-RestMethod -Method Delete `
                                               -Uri $RequestUrl `
                                               -Headers $script:TVConfig.Header `
                                               -ContentType 'application/json' `
@@ -1227,15 +1244,20 @@ function Get-TVGroup
     param(
         [Parameter()]
         [string] $Token = $script:TVConfig.AccessToken,
+
         [Parameter()]
         [string] $Name,
+
         [Parameter()]
         [bool] $Shared, 
 
         [Parameter(Mandatory = $false)]
         [string] $CompanyUserID = [string]::Empty
+
     )
-    begin{
+
+    begin
+    {
         # Make sure to have a token
         if ( [string]::IsNullOrEmpty($Token) ) {
             throw (New-Object -TypeName System.Exception -ArgumentList $script:TOKEN_MISSING_ERROR)
@@ -1247,7 +1269,9 @@ function Get-TVGroup
         Write-Verbose -Message ('Processing RequestURL: {0}' -f $RequestUrl)
         
     }
-    process {
+
+    process
+    {
         [hashtable] $Params = @{}
         if ( -not ( [string]::IsNullOrEmpty($Name)))
         {
@@ -1258,8 +1282,10 @@ function Get-TVGroup
             $Params.shared = $Shared
         }
         # Fetch the groups from the API
-        $Response = Invoke-RestMethod -Uri $RequestUrl -Headers $script:TVConfig.Header -Body $Params
-         
+        $Response = Invoke-RestMethod -Uri $RequestUrl -Headers $script:TVConfig.Header -Body $Params -ErrorVariable RestError -ErrorAction SilentlyContinue
+        
+        $RestError
+
         # Iterate over the groups
         $Response.groups | ForEach-Object {                
             $CurrentGroup = $_
@@ -1270,14 +1296,17 @@ function Get-TVGroup
             {
                 $CurrentGroup.shared_with |  ForEach-Object {
                     [TVGroupUser] $CurrentUser = New-Object -TypeName TVGroupUser -ArgumentList $_.userid, $_.name, $_.permissions, $_.pending
-                    $SharedWith += $CurrentUser
+                    $SharedWith += $CurrentUser 
                 }
+               
             }
+
             [TVUserBase] $Owner = $null
             if ($CurrentGroup.owner -ne $null)
             {
                 $Owner = New-Object -TypeName TVUserBase -ArgumentList $CurrentGroup.owner.userid, $CurrentGroup.owner.name
             }
+
             [TVGroup] $Group = New-Object -TypeName TVGroup -ArgumentList $CurrentGroup.ID, $CurrentGroup.Name, $Owner, $CurrentGroup.permissions, $SharedWith
             Write-Output -InputObject $Group 
         }
@@ -1333,3 +1362,5 @@ function Start-TVRemoteControl
 }
 
 #endregion
+
+    
