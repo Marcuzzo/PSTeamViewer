@@ -535,6 +535,8 @@ function Get-TVAccount
 # If omitted the following default permissions will be set: ShareOwnGroups, ViewOwnConnections, EditConnections, EditFullProfile
 function New-TVUser
 {
+    <#
+    #>
     [CmdletBinding( PositionalBinding = $false ) ]
     [OutputType([TVUser])]
     param(
@@ -542,10 +544,16 @@ function New-TVUser
         [Parameter()]
         [string] $Token = $script:TVConfig.AccessToken,
  
-        [Parameter(Mandatory = $true, HelpMessage = 'The name of the user to create.')]
+        [Parameter(
+            Mandatory = $true, 
+            HelpMessage = 'The name of the user to create.'
+        )]
         [string] $Name,
 
-        [Parameter(Mandatory = $true, HelpMessage = 'The email address of the user to create.')]
+        [Parameter(
+            Mandatory = $true, 
+            HelpMessage = 'The email address of the user to create.'
+        )]
         [ValidateScript({
             if ($_ -match "^([0-9a-zA-Z]([-\.\w]*[0-9a-zA-Z])*@([0-9a-zA-Z][-\w]*[0-9a-zA-Z]\.)+[a-zA-Z]{2,9})$") {
               $true
@@ -553,23 +561,32 @@ function New-TVUser
             else {
               Throw "$_ is  not a valid email address"
             }
-          })]
-          [string] $Email,
+        })]
+        [string] $Email,
 
-          [Parameter(Mandatory = $true, HelpMessage = 'The password of the user to create.')]
+        [Parameter(
+              Mandatory = $true, 
+              HelpMessage = 'The password of the user to create.'
+        )]
           [securestring]$Password,
 
-          [Parameter(Mandatory = $false)]
-          [ValidateSet('en', 'nl', 'fr', 'es')]
-          [string] $Language = 'en',
+        [Parameter(
+            Mandatory = $false
+        )]
+        [ValidateSet('en', 'nl', 'fr', 'es')]
+        [string] $Language = 'en',
 
-          [Parameter(Mandatory = $false)]
-          [ValidateNotNullOrEmpty()]
-          [string] $QuickSupportID = [string]::Empty,
+        [Parameter(
+            Mandatory = $false
+        )]
+        [ValidateNotNullOrEmpty()]
+        [string] $QuickSupportID = [string]::Empty,
 
-          [Parameter(Mandatory = $false)]
-          [ValidateNotNullOrEmpty()]
-          [string] $QuickJoinID = [string]::Empty
+        [Parameter(
+            Mandatory = $false
+        )]
+        [ValidateNotNullOrEmpty()]
+        [string] $QuickJoinID = [string]::Empty
 
     )
 
