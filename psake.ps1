@@ -84,6 +84,35 @@ Task Test -Depends Help {
 }
 
 Task Deploy -Depends Test {
-    # 
-     "Deploying..."
+    
+    # Make sure we're using the Master branch and that it's not a pull request
+    # Environmental Variables Guide: https://www.appveyor.com/docs/environment-variables/
+    if ($env:APPVEYOR_REPO_BRANCH -ne 'master') 
+    {
+        Write-Warning -Message "Skipping version increment and publish for branch $env:APPVEYOR_REPO_BRANCH"
+    }
+    elseif ($env:APPVEYOR_PULL_REQUEST_NUMBER -gt 0)
+    {
+        Write-Warning -Message "Skipping version increment and publish for pull request #$env:APPVEYOR_PULL_REQUEST_NUMBER"
+    }
+    else
+    {
+        Try 
+        {
+            # Build a splat containing the required details and make sure to Stop for errors which will trigger the catch
+            $PM = @{
+                Path        = '.\PSTeamViewer'
+                NuGetApiKey = $env:NuGetApiKey
+                ErrorAction = 'Stop'
+            }
+            Publish-Module @PM
+            Write-Host "Rubrik PowerShell Module version $newVersion published to the PowerShell Gallery." -ForegroundColor Cyan
+        }
+        Catch 
+        {
+            # Sad panda; it broke
+            Write-Warning "Publishing update $newVersion to the PowerShell Gallery failed."
+            throw $_
+        }
+    }
 }

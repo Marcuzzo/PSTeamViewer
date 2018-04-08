@@ -1,6 +1,10 @@
 version: 1.0.{build}
 os: WMF 5
 
+environment:
+  NuGetApiKey:
+    secure: IbU/ul9gw2rJ+mIS6qAc5KAZFByWV4+AbGzKUItSF+EvQY7iSR0c6Tv2a2rLn0aV
+    
 # Skip on updates to the readme.
 skip_commits:
   message: /updated readme.*|update readme.*s/
