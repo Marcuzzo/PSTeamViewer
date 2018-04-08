@@ -8,7 +8,7 @@ schema: 2.0.0
 # New-TVUser
 
 ## SYNOPSIS
-{{Fill in the Synopsis}}
+Create a new Teamviewer user.
 
 ## SYNTAX
 
@@ -18,21 +18,36 @@ New-TVUser [-Token <String>] -Name <String> -Email <String> -Password <SecureStr
 ```
 
 ## DESCRIPTION
-{{Fill in the Description}}
+Create a new Teamviewer user
 
 ## EXAMPLES
 
-### Example 1
+### EXAMPLE 1
 ```
-PS C:\> {{ Add example code here }}
+New-TVUser -Name 'John Doe' -Email 'john.doe@domain.com' -Passwprd (ConvertTo-SecureString -String "P4ssW0rd!" -AsPlainText -Force)
 ```
 
-{{ Add example description here }}
+Creates a new user John Doe with email address john.doe@domain.com and password: P4ssW0rd!
 
 ## PARAMETERS
 
-### -Email
-The email address of the user to create.
+### -Token
+The Teamviewer API token generated on the Teamviewer Management console (https://login.teamviewer.com)
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: $script:TVConfig.AccessToken
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Name
+The name of the new Teamviewer user
 
 ```yaml
 Type: String
@@ -46,24 +61,8 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Language
-{{Fill Language Description}}
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-Accepted values: en, nl, fr, es
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Name
-The name of the user to create.
+### -Email
+The email address of the new user.
 
 ```yaml
 Type: String
@@ -78,7 +77,7 @@ Accept wildcard characters: False
 ```
 
 ### -Password
-The password of the user to create.
+The password for the new user
 
 ```yaml
 Type: SecureString
@@ -92,8 +91,8 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -QuickJoinID
-{{Fill QuickJoinID Description}}
+### -Language
+2 Letter language code for the new user
 
 ```yaml
 Type: String
@@ -102,13 +101,13 @@ Aliases:
 
 Required: False
 Position: Named
-Default value: None
+Default value: En
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
 ### -QuickSupportID
-{{Fill QuickSupportID Description}}
+The QuickSupportID for the new user
 
 ```yaml
 Type: String
@@ -117,13 +116,13 @@ Aliases:
 
 Required: False
 Position: Named
-Default value: None
+Default value: [string]::Empty
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Token
-{{Fill Token Description}}
+### -QuickJoinID
+The QuickJoinID for the new user
 
 ```yaml
 Type: String
@@ -132,22 +131,27 @@ Aliases:
 
 Required: False
 Position: Named
-Default value: None
+Default value: [string]::Empty
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
 ### CommonParameters
-This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable.
+For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
-
-### None
 
 ## OUTPUTS
 
 ### TVUser
 
 ## NOTES
+Author: Marco Micozzi
 
 ## RELATED LINKS
+
+[Get-TVUser]()
+
+[Set-TVUser]()
+

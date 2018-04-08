@@ -8,7 +8,7 @@ schema: 2.0.0
 # Test-TVToken
 
 ## SYNOPSIS
-{{Fill in the Synopsis}}
+Test a TeamViewer API Token
 
 ## SYNTAX
 
@@ -17,21 +17,21 @@ Test-TVToken [-Token] <String> [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-{{Fill in the Description}}
+Tests if a TeamViewer API token is valid
 
 ## EXAMPLES
 
-### Example 1
+### EXAMPLE 1
 ```
-PS C:\> {{ Add example code here }}
+Test-TVToken -Token 'abc123def456ghi789'
 ```
 
-{{ Add example description here }}
+Tests if the token 'abc123def456ghi789' is valid
 
 ## PARAMETERS
 
 ### -Token
-{{Fill Token Description}}
+The token generated on the TeamViewer Management Console
 
 ```yaml
 Type: String
@@ -39,23 +39,23 @@ Parameter Sets: (All)
 Aliases:
 
 Required: True
-Position: 0
+Position: 1
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
 ### CommonParameters
-This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable.
+For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
-
-### None
 
 ## OUTPUTS
 
 ### System.Boolean
 
 ## NOTES
+Author: Marco Micozzi
 
 ## RELATED LINKS
