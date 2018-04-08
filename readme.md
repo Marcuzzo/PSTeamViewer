@@ -39,3 +39,5 @@ Get-TVUser
 Get-TVUser -Token 'YOUR-TEAMVIEWER-TOKEN'
 
 ```
+
+Example scripts can be found in the `example` directory
