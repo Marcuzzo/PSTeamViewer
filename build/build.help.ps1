@@ -47,11 +47,11 @@ switch( $Mode )
 {
     
     'Build' {
-        New-MarkdownHelp -Module PSTeamViewer -OutputFolder $Script:HelpDirectory -Force
+        New-MarkdownHelp -Module PSTeamViewer -OutputFolder $Script:HelpDirectory -Force -WithModulePage
     }
 
     'Update' {
-        Update-MarkdownHelp -Path $Script:HelpDirectory
+        Update-MarkdownHelpModule -Path $Script:HelpDirectory -RefreshModulePage
     }
     
     Default {}

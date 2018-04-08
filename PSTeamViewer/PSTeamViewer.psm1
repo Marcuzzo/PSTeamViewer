@@ -272,6 +272,19 @@ function Initialize-TVAPI
 
 function Test-TVToken
 {
+    <#
+    .SYNOPSIS
+    Test a TeamViewer API Token
+    .DESCRIPTION
+    Tests if a TeamViewer API token is valid
+    .PARAMETER Token
+    The token generated on the TeamViewer Management Console
+    .EXAMPLE
+    Test-TVToken -Token 'abc123def456ghi789'
+    Tests if the token 'abc123def456ghi789' is valid
+    .NOTES
+    Author: Marco Micozzi
+    #>
     [CmdletBinding(
         HelpUri = 'http://psteamviewer.readthedocs.io/en/latest/cmdlets/Test-TVToken/'
     )]
@@ -544,6 +557,33 @@ function Get-TVAccount
 function New-TVUser
 {
     <#
+    .SYNOPSIS
+    Create a new Teamviewer user.
+    .DESCRIPTION
+    Create a new Teamviewer user
+    .PARAMETER Token
+    The Teamviewer API token generated on the Teamviewer Management console (https://login.teamviewer.com)
+    .PARAMETER Name
+    The name of the new Teamviewer user
+    .PARAMETER Email
+    The email address of the new user.
+    .PARAMETER Password
+    The password for the new user
+    .PARAMETER Language 
+    2 Letter language code for the new user
+    .PARAMETER QuickSupportID 
+    The QuickSupportID for the new user
+    .PARAMETER QuickJoinID 
+    The QuickJoinID for the new user 
+    .EXAMPLE
+    New-TVUser -Name 'John Doe' -Email 'john.doe@domain.com' -Passwprd (ConvertTo-SecureString -String "P4ssW0rd!" -AsPlainText -Force)   
+    Creates a new user John Doe with email address john.doe@domain.com and password: P4ssW0rd!
+    .NOTES
+    Author: Marco Micozzi
+    .LINK
+    Get-TVUser
+    .LINK
+    Set-TVUser
     #>
     [CmdletBinding( 
         PositionalBinding = $false,
