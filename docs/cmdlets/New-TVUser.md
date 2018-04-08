@@ -24,7 +24,7 @@ Create a new Teamviewer user
 
 ### EXAMPLE 1
 ```
-New-TVUser -Name 'John Doe' -Email 'john.doe@domain.com' -Passwprd (ConvertTo-SecureString -String "P4ssW0rd!" -AsPlainText -Force)
+New-TVUser -Token $Env:TeamViewerToken -Name 'John Doe' -Email 'john.doe@domain.com' -Passwprd (ConvertTo-SecureString -String "P4ssW0rd!" -AsPlainText -Force)
 ```
 
 Creates a new user John Doe with email address john.doe@domain.com and password: P4ssW0rd!

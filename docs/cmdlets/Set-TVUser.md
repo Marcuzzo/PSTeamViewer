@@ -31,12 +31,19 @@ Modify an existing Teamviewer User
 
 ## EXAMPLES
 
-### Example 1
-```powershell
-PS C:\> {{ Add example code here }}
+### EXAMPLE 1
+```
+Set-TVUser -Token $Env:TeamViewerToken -UserID 'u123456789' -Name 'Doe, John'
 ```
 
-{{ Add example description here }}
+Sets the name of user with ID: u123456789 to 'Doe, John'
+
+### EXAMPLE 2
+```
+Get-TVUser -Token $Env:TeamViewerToken -UserID 'u123456789' | Set-TVUser -Token $Env:TeamViewerToken -Name 'Solo, Han'
+```
+
+Changes the name of user with ID: u123456789 to 'Solo, Han'
 
 ## PARAMETERS
 
@@ -116,7 +123,7 @@ Accept wildcard characters: False
 ```
 
 ### -Permissions
-{{Fill Permissions Description}}
+a list of Permissions to add to the user account
 
 ```yaml
 Type: String[]
@@ -196,9 +203,11 @@ For more information, see about_CommonParameters (http://go.microsoft.com/fwlink
 
 ## INPUTS
 
+### TVUser. The output of the Get-TVUser CmdLet.
+
 ## OUTPUTS
 
-### TVUser
+### TVUser. The TVUser object that was modified.
 
 ## NOTES
 

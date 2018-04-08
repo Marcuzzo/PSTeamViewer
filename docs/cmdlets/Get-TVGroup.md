@@ -8,7 +8,7 @@ schema: 2.0.0
 # Get-TVGroup
 
 ## SYNOPSIS
-{{Fill in the Synopsis}}
+Get TeamViewer group information
 
 ## SYNTAX
 
@@ -18,36 +18,19 @@ Get-TVGroup [[-Token] <String>] [[-Name] <String>] [[-Shared] <Boolean>] [[-Comp
 ```
 
 ## DESCRIPTION
-{{Fill in the Description}}
+Get information about a teamviewer group via the API
 
 ## EXAMPLES
 
-### Example 1
+### EXAMPLE 1
 ```
-PS C:\> {{ Add example code here }}
+Get-TVGroup -Token $Env:
 ```
-
-{{ Add example description here }}
 
 ## PARAMETERS
 
-### -CompanyUserID
-{{Fill CompanyUserID Description}}
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: 3
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Name
-{{Fill Name Description}}
+### -Token
+The API token generated on the Teamviewer Management Console
 
 ```yaml
 Type: String
@@ -56,16 +39,16 @@ Aliases:
 
 Required: False
 Position: 1
-Default value: None
+Default value: $script:TVConfig.AccessToken
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Shared
-{{Fill Shared Description}}
+### -Name
+The name of the group to fetch
 
 ```yaml
-Type: Boolean
+Type: String
 Parameter Sets: (All)
 Aliases:
 
@@ -76,8 +59,23 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Token
-{{Fill Token Description}}
+### -Shared
+Wether or not to list shared groups.
+
+```yaml
+Type: Boolean
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: 3
+Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -CompanyUserID
+The admin ID
 
 ```yaml
 Type: String
@@ -85,8 +83,8 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 0
-Default value: None
+Position: 4
+Default value: [string]::Empty
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -96,8 +94,6 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
-
-### None
 
 ## OUTPUTS
 

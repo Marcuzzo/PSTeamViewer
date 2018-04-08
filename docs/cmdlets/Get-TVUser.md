@@ -44,8 +44,24 @@ Get the details of one or more users from the Teamviewer management portal
 
 ### EXAMPLE 1
 ```
-Get-TVUser -Verbose | Where-Object { $_.Active -eq $false }
+Get-TVUser -Token $Env:TeamViewerToken
 ```
+
+Gets all Teamviewer Users
+
+### EXAMPLE 2
+```
+Get-TVUser -Token $Env:TeamViewerToken -Name 'John Doe'
+```
+
+Gets the user or all users with the name 'John Doe'
+
+### EXAMPLE 3
+```
+Get-TVUser -Token $Env:TeamViewerToken -Email 'john.doe@domain.com'
+```
+
+Gets the user with the specified email address.
 
 ## PARAMETERS
 
@@ -145,10 +161,18 @@ For more information, see about_CommonParameters (http://go.microsoft.com/fwlink
 
 ## INPUTS
 
+### None. You can't pipe objects to the Get-TVUser CmdLet
+
 ## OUTPUTS
 
-### TVUser[]
+### TVUser. a TVUser object or an array of TVUser Objects
 
 ## NOTES
+Author: Marco Micozzi
 
 ## RELATED LINKS
+
+[New-TVUSer]()
+
+[Set-TVUser]()
+

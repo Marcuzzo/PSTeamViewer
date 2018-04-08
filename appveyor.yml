@@ -7,7 +7,7 @@ environment:
     
 # Skip on updates to the readme.
 skip_commits:
-  message: /updated readme.*|update readme.*s/
+  message: /updated (readme|doc).*|update (readme|doc).*s/
 
 build: false
 
