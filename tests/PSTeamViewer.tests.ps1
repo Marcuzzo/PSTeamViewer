@@ -5,6 +5,7 @@ if(-not $PSScriptRoot)
     $PSScriptRoot = Split-Path $MyInvocation.MyCommand.Path -Parent
 }
 
+
 Import-Module "$PSScriptRoot\..\PSTeamViewer\PSTeamViewer.psd1" -Force
 
 
@@ -103,7 +104,7 @@ InModuleScope PSTeamViewer {
         # When Set-TVUser call's Get-TVUser it will return an object wtith the same data...
         Context 'Set-TVUser' {                  
             It 'Updating TeamViewer user' {                            
-                $TVUser = Set-TVUser -UserID 'u1111111' -Name 'Lastname, Firstname' -Token "ABC123"                   
+                $TVUser = Set-TVUser -UserID 'u1111111' -Name 'Lastname, Firstname' -Token "ABC123"
                 $TVUser.GetType().Name | should be 'TVUser'
                 $TVUser.ID | Should be 'u1111111'
                 Assert-MockCalled -CommandName Invoke-RestMethod -ModuleName PSTeamviewer                    
