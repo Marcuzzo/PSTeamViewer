@@ -8,7 +8,7 @@ schema: 2.0.0
 # Remove-TVGroup
 
 ## SYNOPSIS
-{{Fill in the Synopsis}}
+Remove a Teamviewer group
 
 ## SYNTAX
 
@@ -31,26 +31,116 @@ Remove-TVGroup [-Token <String>] -GroupID <String> [-CompanyUserID <String>] [-W
 ```
 
 ## DESCRIPTION
-{{Fill in the Description}}
+Remove a Teamviewer group
 
 ## EXAMPLES
 
-### Example 1
+### EXAMPLE 1
 ```
-PS C:\> {{ Add example code here }}
+Remove-TVGroup -Name 'TestGroup'
 ```
 
-{{ Add example description here }}
+Removes the group "TestGroup" by name
+
+### EXAMPLE 2
+```
+Get-TVGroup -Name 'TestGroup' | Remove-TVGroup
+```
+
+Removes the group 'TestGroup' by InputObject
+
+### EXAMPLE 3
+```
+Remove-TVGroup -GroupID 'GRP1'
+```
+
+Removes the group with GroupID 'GRP1'
 
 ## PARAMETERS
 
-### -CompanyUserID
-{{Fill CompanyUserID Description}}
+### -Token
+{{Fill Token Description}}
 
 ```yaml
 Type: String
 Parameter Sets: (All)
 Aliases:
+
+Required: False
+Position: Named
+Default value: $script:TVConfig.AccessToken
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -InputObject
+an instance of TVGroup returned by Get-TVGroup
+
+```yaml
+Type: TVGroup
+Parameter Sets: ByInputObject
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: True (ByValue)
+Accept wildcard characters: False
+```
+
+### -Name
+The name of the TVGroup to be removed
+
+```yaml
+Type: String
+Parameter Sets: ByName
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -GroupID
+The ID of the group to be removed
+
+```yaml
+Type: String
+Parameter Sets: ByID
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -CompanyUserID
+The ID of the administrator to remove a company group instead of a user group.
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: [string]::Empty
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -WhatIf
+Shows what would happen if the cmdlet runs.
+The cmdlet is not run.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: wi
 
 Required: False
 Position: Named
@@ -69,83 +159,7 @@ Aliases: cf
 
 Required: False
 Position: Named
-Default value: False
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -GroupID
-The Group ID of the group to delete.
-
-```yaml
-Type: String
-Parameter Sets: ByID
-Aliases:
-
-Required: True
-Position: Named
 Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -InputObject
-{{Fill InputObject Description}}
-
-```yaml
-Type: TVGroup
-Parameter Sets: ByInputObject
-Aliases:
-
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: True (ByValue)
-Accept wildcard characters: False
-```
-
-### -Name
-The name of the group to delete.
-
-```yaml
-Type: String
-Parameter Sets: ByName
-Aliases:
-
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Token
-{{Fill Token Description}}
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -WhatIf
-Shows what would happen if the cmdlet runs.
-The cmdlet is not run.
-
-```yaml
-Type: SwitchParameter
-Parameter Sets: (All)
-Aliases: wi
-
-Required: False
-Position: Named
-Default value: False
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -156,12 +170,14 @@ For more information, see about_CommonParameters (http://go.microsoft.com/fwlink
 
 ## INPUTS
 
-### TVGroup
-
 ## OUTPUTS
 
-### System.Object
-
 ## NOTES
+Author: Marco Micozzi
 
 ## RELATED LINKS
+
+[Get-TVGroup]()
+
+[New-TVGroup]()
+

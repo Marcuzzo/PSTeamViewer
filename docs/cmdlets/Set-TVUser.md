@@ -8,7 +8,7 @@ schema: 2.0.0
 # Set-TVUser
 
 ## SYNOPSIS
-{{Fill in the Synopsis}}
+Modify an existing Teamviewer user
 
 ## SYNTAX
 
@@ -27,12 +27,12 @@ Set-TVUser [-Token <String>] -UserID <String> [-Name <String>] [-Email <String>]
 ```
 
 ## DESCRIPTION
-{{Fill in the Description}}
+Modify an existing Teamviewer User
 
 ## EXAMPLES
 
 ### Example 1
-```
+```powershell
 PS C:\> {{ Add example code here }}
 ```
 
@@ -40,23 +40,8 @@ PS C:\> {{ Add example code here }}
 
 ## PARAMETERS
 
-### -Active
-{{Fill Active Description}}
-
-```yaml
-Type: Boolean
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Email
-{{Fill Email Description}}
+### -Token
+The Teamviewer API token generated on the Teamviewer Management console (https://login.teamviewer.com)
 
 ```yaml
 Type: String
@@ -65,13 +50,13 @@ Aliases:
 
 Required: False
 Position: Named
-Default value: None
+Default value: $script:TVConfig.AccessToken
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
 ### -Identity
-{{Fill Identity Description}}
+a TVUser Object fetched by Get-TVUser
 
 ```yaml
 Type: TVUser
@@ -85,8 +70,23 @@ Accept pipeline input: True (ByValue)
 Accept wildcard characters: False
 ```
 
+### -UserID
+The userID of a Teamviewer user
+
+```yaml
+Type: String
+Parameter Sets: ById
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -Name
-{{Fill Name Description}}
+The new name of the Teamviewer user
 
 ```yaml
 Type: String
@@ -100,11 +100,11 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Password
-{{Fill Password Description}}
+### -Email
+The new email address of the Teamviewer user
 
 ```yaml
-Type: SecureString
+Type: String
 Parameter Sets: (All)
 Aliases:
 
@@ -122,7 +122,6 @@ Accept wildcard characters: False
 Type: String[]
 Parameter Sets: (All)
 Aliases:
-Accepted values: None, ManageAdmins, ManageUsers, ShareOwnGroups, ViewAllConnections, ViewOwnConnections, EditConnections, DeleteConnections, EditFullProfile, ManagePolicies, AssignPolicies, AcknowledgeAllAlerts, AcknowledgeOwnAlerts, ViewAllAssets, ViewOwnAssets, EditAllCustomModuleConfigs, EditOwnCustomModuleConfigs
 
 Required: False
 Position: Named
@@ -131,8 +130,38 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -Password
+The password for the Teamviewer user
+
+```yaml
+Type: SecureString
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Active
+Indicates that the user should be active or not
+
+```yaml
+Type: Boolean
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -QuickJoinID
-{{Fill QuickJoinID Description}}
+The QuickJoinID for the Teamviewer user
 
 ```yaml
 Type: String
@@ -147,7 +176,7 @@ Accept wildcard characters: False
 ```
 
 ### -QuickSupportID
-{{Fill QuickSupportID Description}}
+The QuickSupportID for the Teamviewer user
 
 ```yaml
 Type: String
@@ -155,36 +184,6 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Token
-{{Fill Token Description}}
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -UserID
-{{Fill UserID Description}}
-
-```yaml
-Type: String
-Parameter Sets: ById
-Aliases:
-
-Required: True
 Position: Named
 Default value: None
 Accept pipeline input: False
@@ -197,8 +196,6 @@ For more information, see about_CommonParameters (http://go.microsoft.com/fwlink
 
 ## INPUTS
 
-### TVUser
-
 ## OUTPUTS
 
 ### TVUser
@@ -206,3 +203,8 @@ For more information, see about_CommonParameters (http://go.microsoft.com/fwlink
 ## NOTES
 
 ## RELATED LINKS
+
+[Get-TVUser]()
+
+[New-TVUser]()
+

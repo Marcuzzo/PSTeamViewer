@@ -21,12 +21,12 @@ Create a new TeamViewer Group
 
 ## EXAMPLES
 
-### Example 1
-```powershell
-PS C:\> {{ Add example code here }}
+### EXAMPLE 1
+```
+New-TVGroup -Token $env:TeamviewerToken -Name 'MyTestGroup'
 ```
 
-{{ Add example description here }}
+Creates the group MyTestGroup
 
 ## PARAMETERS
 
@@ -81,9 +81,18 @@ For more information, see about_CommonParameters (http://go.microsoft.com/fwlink
 
 ## INPUTS
 
+### None. You cannot pipe objects to New-TVGroup
+
 ## OUTPUTS
+
+### TVGroup. New-TVGroup will return the newly created TVGroup object
 
 ## NOTES
 Author: Marco Micozzi
 
 ## RELATED LINKS
+
+[Get-TVGroup]()
+
+[Remove-TVGroup]()
+

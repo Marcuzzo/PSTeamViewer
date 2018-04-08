@@ -698,6 +698,36 @@ function New-TVUser
 #TODO: User or company access token. Scope: Users.ModifyUsers or Users.ModifyAdministrators.
 function Set-TVUser
 {
+    <#
+    .SYNOPSIS
+    Modify an existing Teamviewer user
+    .DESCRIPTION
+    Modify an existing Teamviewer User
+    .PARAMETER Token
+    The Teamviewer API token generated on the Teamviewer Management console (https://login.teamviewer.com)
+    .PARAMETER Identity
+    a TVUser Object fetched by Get-TVUser
+    .PARAMETER UserID
+    The userID of a Teamviewer user
+    .PARAMETER Name 
+    The new name of the Teamviewer user
+    .PARAMETER Email
+    The new email address of the Teamviewer user
+    .PARAMETER Permission
+    a list of Permissions to add to the user account
+    .PARAMETER Active
+    Indicates that the user should be active or not
+    .PARAMETER Password
+    The password for the Teamviewer user
+    .PARAMETER QuickSupportID 
+    The QuickSupportID for the Teamviewer user
+    .PARAMETER QuickJoinID 
+    The QuickJoinID for the Teamviewer user 
+    .LINK
+    Get-TVUser
+    .LINK
+    New-TVUser
+    #>
     [CmdletBinding(
         HelpUri = 'http://psteamviewer.readthedocs.io/en/latest/cmdlets/Set-TVUser/'
     )]
@@ -1168,7 +1198,38 @@ function Get-TVDevice
 
 function Remove-TVGroup
 {
-    [CmdletBinding(SupportsShouldProcess=$true)]
+    <#
+    .SYNOPSIS
+    Remove a Teamviewer group
+    .DESCRIPTION
+    Remove a Teamviewer group
+    .PARAMETER InputObject
+    an instance of TVGroup returned by Get-TVGroup
+    .PARAMETER Name
+    The name of the TVGroup to be removed
+    .PARAMETER GroupID
+    The ID of the group to be removed
+    .PARAMETER CompanyUserID
+    The ID of the administrator to remove a company group instead of a user group.
+    .EXAMPLE
+    Remove-TVGroup -Name 'TestGroup'
+    Removes the group "TestGroup" by name
+    .EXAMPLE
+    Get-TVGroup -Name 'TestGroup' | Remove-TVGroup
+    Removes the group 'TestGroup' by InputObject
+    .EXAMPLE
+    Remove-TVGroup -GroupID 'GRP1'
+    Removes the group with GroupID 'GRP1'
+    .NOTES
+    Author: Marco Micozzi
+    .LINK
+    Get-TVGroup
+    .LINK
+    New-TVGroup
+    #>
+    [CmdletBinding(
+        SupportsShouldProcess=$true
+    )]
     param(
 
         [Parameter()]
@@ -1266,12 +1327,25 @@ function New-TVGroup
     The name of the new group
     .PARAMETER CompanyUserID 
     Administrator user ID
+    .EXAMPLE
+    New-TVGroup -Token $env:TeamviewerToken -Name 'MyTestGroup'
+    Creates the group MyTestGroup
+    .INPUTS
+    None. You cannot pipe objects to New-TVGroup
+    .OUTPUTS
+    TVGroup. New-TVGroup will return the newly created TVGroup object  
+
     .NOTES 
     Author: Marco Micozzi
+    .LINK
+    Get-TVGroup
+    .LINK
+    Remove-TVGroup
     #>
     [CmdletBinding(
         HelpUri = 'http://psteamviewer.readthedocs.io/en/latest/cmdlets/New-TVGroup/'
     )]
+    [OutputType([TVGroup])]
     param(
 
         [Parameter()]
