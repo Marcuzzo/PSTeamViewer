@@ -241,7 +241,9 @@ function Initialize-TVAPI
     .NOTES
     Initializing the wrapper will allow all API call's to be made without having to specify the token in each call
     #>
-    [CmdletBinding()]
+    [CmdletBinding(
+        HelpUri = 'http://psteamviewer.readthedocs.io/en/latest/cmdlets/Initialize-TVAPI/'
+    )]
     [OutputType([bool])]
     param(
         [Parameter(Mandatory=$true)]
@@ -270,7 +272,9 @@ function Initialize-TVAPI
 
 function Test-TVToken
 {
-    [CmdletBinding()]
+    [CmdletBinding(
+        HelpUri = 'http://psteamviewer.readthedocs.io/en/latest/cmdlets/Test-TVToken/'
+    )]
     [OutputType([bool])]
     param(
         [Parameter(Mandatory=$true)]
@@ -350,7 +354,9 @@ function Revoke-TVOauth2Token
 function Get-TVOauth2Token
 {
     [OutputType([TVToken])]    
-    [CmdletBinding()]
+    [CmdletBinding(
+        HelpUri = 'http://psteamviewer.readthedocs.io/en/latest/cmdlets/Get-TVOauth2Token/'
+    )]
     param(
 
         [Parameter(
@@ -497,7 +503,9 @@ function Get-TVOauth2Token
 #region Account
 function Get-TVAccount
 {
-    [CmdletBinding()]
+    [CmdletBinding(
+        HelpUri = 'http://psteamviewer.readthedocs.io/en/latest/cmdlets/Get-TVAccount/'
+    )]
     [OutputType([TVAccount])]
     param(
         [Parameter()]
@@ -537,7 +545,10 @@ function New-TVUser
 {
     <#
     #>
-    [CmdletBinding( PositionalBinding = $false ) ]
+    [CmdletBinding( 
+        PositionalBinding = $false,
+        HelpUri = 'http://psteamviewer.readthedocs.io/en/latest/cmdlets/New-TVUser/'    
+    )]
     [OutputType([TVUser])]
     param(
         
@@ -647,7 +658,9 @@ function New-TVUser
 #TODO: User or company access token. Scope: Users.ModifyUsers or Users.ModifyAdministrators.
 function Set-TVUser
 {
-    [CmdletBinding()]
+    [CmdletBinding(
+        HelpUri = 'http://psteamviewer.readthedocs.io/en/latest/cmdlets/Set-TVUser/'
+    )]
     [OutputType([TVUser])]   
     param(
 
@@ -823,7 +836,11 @@ function Get-TVUser
        Get-TVUser -Verbose | Where-Object { $_.Active -eq $false }  
 
     #>
-    [CmdletBinding(PositionalBinding=$false, DefaultParameterSetName="All")]
+    [CmdletBinding(
+        PositionalBinding=$false, 
+        DefaultParameterSetName="All",
+        HelpUri = 'http://psteamviewer.readthedocs.io/en/latest/cmdlets/Get-TVUser/'
+    )]
     [OutputType([TVUser[]])]    
     param(
         [Parameter()]
@@ -901,7 +918,9 @@ function Get-TVUser
 
 function Set-TVDevice
 {
-    [CmdletBinding()]
+    [CmdletBinding(
+        
+    )]
     [OutputType([TVDevice])]
     param(
         [Parameter( Position = 0 )]
@@ -1038,7 +1057,9 @@ function Get-TVDevice
     Get-TVDevice -OnlineState Online
        
     #>
-    [CmdletBinding()]
+    [CmdletBinding(
+        HelpUri = 'http://psteamviewer.readthedocs.io/en/latest/cmdlets/Get-TVDevice/'
+    )]
     [OutputType([TVDevice[]])]
     param(
 
@@ -1194,7 +1215,23 @@ function Remove-TVGroup
 
 function New-TVGroup
 {
-    [CmdletBinding()]
+    <#
+    .SYNOPSIS 
+    Create a new TeamViewer Group
+    .DESCRIPTION
+    Create a new TeamViewer Group
+    .PARAMETER Token
+    The API token generated on the Teamviewer Management Console
+    .PARAMETER Name
+    The name of the new group
+    .PARAMETER CompanyUserID 
+    Administrator user ID
+    .NOTES 
+    Author: Marco Micozzi
+    #>
+    [CmdletBinding(
+        HelpUri = 'http://psteamviewer.readthedocs.io/en/latest/cmdlets/New-TVGroup/'
+    )]
     param(
 
         [Parameter()]
@@ -1256,7 +1293,9 @@ function New-TVGroup
 
 function Get-TVGroup
 {
-    [CmdletBinding()]
+    [CmdletBinding(
+        HelpUri = 'http://psteamviewer.readthedocs.io/en/latest/cmdlets/Get-TVGroup/'
+    )]
     [OutputType([TVGroup])]
     param(
         [Parameter()]

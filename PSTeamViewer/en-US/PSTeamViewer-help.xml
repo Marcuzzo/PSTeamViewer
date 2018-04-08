@@ -966,7 +966,7 @@
     <command:syntax>
       <command:syntaxItem>
         <maml:name>Initialize-TVAPI</maml:name>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="0" aliases="t">
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="t">
           <maml:name>Token</maml:name>
           <maml:Description>
             <maml:para>{{Fill Token Description}}</maml:para>
@@ -981,7 +981,7 @@
       </command:syntaxItem>
     </command:syntax>
     <command:parameters>
-      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="0" aliases="t">
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="t">
         <maml:name>Token</maml:name>
         <maml:Description>
           <maml:para>{{Fill Token Description}}</maml:para>
@@ -1045,7 +1045,7 @@
     <command:syntax>
       <command:syntaxItem>
         <maml:name>New-TVGroup</maml:name>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="0" aliases="none">
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
           <maml:name>Token</maml:name>
           <maml:Description>
             <maml:para>{{Fill Token Description}}</maml:para>
@@ -1057,7 +1057,7 @@
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="none">
           <maml:name>Name</maml:name>
           <maml:Description>
             <maml:para>The name of the group to create.</maml:para>
@@ -1069,7 +1069,7 @@
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="none">
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="3" aliases="none">
           <maml:name>CompanyUserID</maml:name>
           <maml:Description>
             <maml:para>{{Fill CompanyUserID Description}}</maml:para>
@@ -1084,10 +1084,10 @@
       </command:syntaxItem>
     </command:syntax>
     <command:parameters>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="none">
-        <maml:name>CompanyUserID</maml:name>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
+        <maml:name>Token</maml:name>
         <maml:Description>
-          <maml:para>{{Fill CompanyUserID Description}}</maml:para>
+          <maml:para>{{Fill Token Description}}</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
         <dev:type>
@@ -1096,7 +1096,7 @@
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="none">
         <maml:name>Name</maml:name>
         <maml:Description>
           <maml:para>The name of the group to create.</maml:para>
@@ -1108,10 +1108,10 @@
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="0" aliases="none">
-        <maml:name>Token</maml:name>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="3" aliases="none">
+        <maml:name>CompanyUserID</maml:name>
         <maml:Description>
-          <maml:para>{{Fill Token Description}}</maml:para>
+          <maml:para>{{Fill CompanyUserID Description}}</maml:para>
         </maml:Description>
         <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
         <dev:type>
