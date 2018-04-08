@@ -1,27 +1,35 @@
+# TeamViewer Powershell Module
+
 [![Build status](https://ci.appveyor.com/api/projects/status/1n8li43y0b2aydru?svg=true)](https://ci.appveyor.com/project/Marcuzzo/psteamviewer)
 [![Documentation Status](https://readthedocs.org/projects/psteamviewer/badge/?version=latest)](http://psteamviewer.readthedocs.io/en/latest/?badge=latest)
 
-
-# TeamViewer Powershell Module
 This is a PowerShell module API wrapper for the [TeamViewer API](https://integrate.teamviewer.com/en/develop/api/).
 
-
 ## Description
+
 This project is still a work in progress
+
+## Install
+
+The module is available on [PowershellGallery](https://www.powershellgallery.com/packages/PSTeamViewer)
+
+```powershell
+Install-Module -Name PSTeamViewer 
+```
 
 ## Available CmdLets
 
- * Initialize-TVAPI
- * Test-TVToken 
- * Get-TVOauth2Token
- * Get-TVAccount
- * Get-TVUser
- * Set-TVUser
- * New-TVUser
- * Get-TVGroup
- * New-TVGroup
- * Remove-TVGroup
- * Get-TVDevice
+* Initialize-TVAPI
+* Test-TVToken
+* Get-TVOauth2Token
+* Get-TVAccount
+* Get-TVUser
+* Set-TVUser
+* New-TVUser
+* Get-TVGroup
+* New-TVGroup
+* Remove-TVGroup
+* Get-TVDevice
 
 ## Examples
 
