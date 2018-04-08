@@ -1,22 +1,22 @@
 ﻿[CmdletBinding()]
-param()
+param(
+    # Store your token in an environment variable
+    [Parameter()]
+    [string] $Token = $env:TVAccessToken
+)
 
 
 Import-Module "$PSScriptRoot\..\PSTeamViewer\PSTeamViewer.psd1"
 
-# Store your token in an environment variable 
-[string] $Token = $env:TVAccessToken
+ 
+
 
 # Initialize the API
 Initialize-TVAPI -Token $Token 
 
 # Get the Active Directory users based 
-#Get-TVUser | Where-Object {  ( $_.name -notlike '*,*'  ) -and ( $_.active -eq $true) }| ForEach-Object {
-Get-TVUser | Where-Object {  $_.active -eq $true }| ForEach-Object {
+Get-TVUser | Where-Object {  ( $_.name -like '*,*'  ) -and ( $_.active -eq $true) }| ForEach-Object {
 
-	
-    # This obviously only works if the names in 
-    # the TeamViewer management console is correct
     [string[]] $Name = $_.Name -split ', '
     [string] $Surname = $Name[0]
     [string] $Givenname = $Name[1]
@@ -27,3 +27,4 @@ Get-TVUser | Where-Object {  $_.active -eq $true }| ForEach-Object {
 
 }
 
+Remove-Module -Name PSTeamViewer
