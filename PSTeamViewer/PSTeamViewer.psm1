@@ -576,7 +576,7 @@ function New-TVUser
     .PARAMETER QuickJoinID 
     The QuickJoinID for the new user 
     .EXAMPLE
-    New-TVUser -Name 'John Doe' -Email 'john.doe@domain.com' -Passwprd (ConvertTo-SecureString -String "P4ssW0rd!" -AsPlainText -Force)   
+    New-TVUser -Token $Env:TeamViewerToken -Name 'John Doe' -Email 'john.doe@domain.com' -Passwprd (ConvertTo-SecureString -String "P4ssW0rd!" -AsPlainText -Force)   
     Creates a new user John Doe with email address john.doe@domain.com and password: P4ssW0rd!
     .NOTES
     Author: Marco Micozzi
@@ -713,7 +713,7 @@ function Set-TVUser
     The new name of the Teamviewer user
     .PARAMETER Email
     The new email address of the Teamviewer user
-    .PARAMETER Permission
+    .PARAMETER Permissions
     a list of Permissions to add to the user account
     .PARAMETER Active
     Indicates that the user should be active or not
@@ -723,6 +723,16 @@ function Set-TVUser
     The QuickSupportID for the Teamviewer user
     .PARAMETER QuickJoinID 
     The QuickJoinID for the Teamviewer user 
+    .EXAMPLE
+    Set-TVUser -Token $Env:TeamViewerToken -UserID 'u123456789' -Name 'Doe, John'
+    Sets the name of user with ID: u123456789 to 'Doe, John'
+    .EXAMPLE
+    Get-TVUser -Token $Env:TeamViewerToken -UserID 'u123456789' | Set-TVUser -Token $Env:TeamViewerToken -Name 'Solo, Han'
+    Changes the name of user with ID: u123456789 to 'Solo, Han' 
+    .INPUTS
+    TVUser. The output of the Get-TVUser CmdLet.
+    .OUTPUTS
+    TVUser. The TVUser object that was modified.
     .LINK
     Get-TVUser
     .LINK
@@ -734,7 +744,9 @@ function Set-TVUser
     [OutputType([TVUser])]   
     param(
 
-        [Parameter()]
+        [Parameter(
+            Mandatory = $false
+        )]
         [string] $Token = $script:TVConfig.AccessToken,
 
         [Parameter(
@@ -749,15 +761,21 @@ function Set-TVUser
             ParameterSetName = 'ById')]
         [string] $UserID,
 
-        [Parameter()]
+        [Parameter(
+            Mandatory = $false
+        )]
         [ValidateNotNullOrEmpty()]
         [string] $Name = $null,
         
-        [Parameter()]
+        [Parameter(
+            Mandatory = $false
+        )]
         [ValidateNotNullOrEmpty()]
         [string] $Email = $null,
         
-        [Parameter()]
+        [Parameter(
+            Mandatory = $false
+        )]
         [ValidateNotNullOrEmpty()]
         [ValidateSet('None', 'ManageAdmins', 'ManageUsers', 'ShareOwnGroups', 'ViewAllConnections', 
                      'ViewOwnConnections', 'EditConnections', 'DeleteConnections', 'EditFullProfile', 
@@ -771,7 +789,9 @@ function Set-TVUser
         [ValidateNotNullOrEmpty()]
         [securestring] $Password = $null,
         
-        [Parameter()]
+        [Parameter(
+            Mandatory = $false
+        )]
         [bool] $Active,
         
         [Parameter(
@@ -880,50 +900,79 @@ function Get-TVUser
     <#
     .SYNOPSIS
     Get Teamviewer user(s)
-    
     .DESCRIPTION
     Get the details of one or more users from the Teamviewer management portal
-    
     .PARAMETER Token
     The Teamviewer API token
-    
     .PARAMETER UserID
     The ID of the user on the Teamviewer portal
-    
     .PARAMETER Name
     The name of the user
-    
     .PARAMETER Email
     The email address of the user
-    
     .PARAMETER Permission
     Permissions assigned to a user
-    
     .PARAMETER Simple
     minimize the output of the CmdLet
-    
     .EXAMPLE
-       Get-TVUser -Verbose | Where-Object { $_.Active -eq $false }  
-
+    Get-TVUser -Token $Env:TeamViewerToken
+    Gets all Teamviewer Users
+    .EXAMPLE
+    Get-TVUser -Token $Env:TeamViewerToken -Name 'John Doe'
+    Gets the user or all users with the name 'John Doe'
+    .EXAMPLE
+    Get-TVUser -Token $Env:TeamViewerToken -Email 'john.doe@domain.com'
+    Gets the user with the specified email address.
+    .INPUTS
+    None. You can't pipe objects to the Get-TVUser CmdLet
+    .OUTPUTS
+    TVUser. a TVUser object or an array of TVUser Objects
+    .NOTES
+    Author: Marco Micozzi
+    .LINK 
+    New-TVUSer
+    .LINK
+    Set-TVUser
     #>
     [CmdletBinding(
-        PositionalBinding=$false, 
-        DefaultParameterSetName="All",
-        HelpUri = 'http://psteamviewer.readthedocs.io/en/latest/cmdlets/Get-TVUser/'
+        HelpUri="http://psteamviewer.readthedocs.io/en/latest/cmdlets/Get-TVUser",
+        PositionalBinding=$false,
+        DefaultParameterSetName='All'
     )]
     [OutputType([TVUser[]])]    
     param(
-        [Parameter()]
+        [Parameter(
+            Mandatory = $false
+        )]
         [string] $Token = $script:TVConfig.AccessToken,
-        [Parameter( Mandatory = $true, ParameterSetName = 'ByID')]
+
+        [Parameter(
+            Mandatory = $true, 
+            ParameterSetName = 'ByID'
+        )]
         [string[]] $UserID,
-        [Parameter( Mandatory = $true, ParameterSetName = 'ByName')]
+
+        [Parameter( 
+            Mandatory = $true, 
+            ParameterSetName = 'ByName'
+        )]
         [string] $Name,
-        [Parameter(Mandatory = $true, ParameterSetName = 'ByEmail')]
+
+        [Parameter(
+            Mandatory = $true, 
+            ParameterSetName = 'ByEmail'
+        )]
         [string[]] $Email,
-        [Parameter(Mandatory = $true,ParameterSetName = 'ByPermission')]
+
+        [Parameter(
+            Mandatory = $true,
+            ParameterSetName = 'ByPermission'
+        )]
         [string[]] $Permission,
-        [Parameter()]
+
+        [Parameter(
+            Mandatory = $false
+        )]
         [switch] $Simple
     )
     begin
@@ -1202,7 +1251,9 @@ function Remove-TVGroup
     .SYNOPSIS
     Remove a Teamviewer group
     .DESCRIPTION
-    Remove a Teamviewer group
+    Remove a Teamviewer group 
+    .PARAMETER Token
+    The Teamviewer API token generated on the Teamviewer Management console (https://login.teamviewer.com)
     .PARAMETER InputObject
     an instance of TVGroup returned by Get-TVGroup
     .PARAMETER Name
@@ -1220,6 +1271,10 @@ function Remove-TVGroup
     .EXAMPLE
     Remove-TVGroup -GroupID 'GRP1'
     Removes the group with GroupID 'GRP1'
+    .INPUTS
+    TVGroup. The objects returned by the Get-TVGroup can be piped to the Remove-TVGroup CmdLet.
+    .OUTPUTS
+    None. This CmdLet doesn't produce any output
     .NOTES
     Author: Marco Micozzi
     .LINK
@@ -1296,18 +1351,19 @@ function Remove-TVGroup
                    
         Try{
             if ( $PSCmdlet.ShouldProcess($InputObject.Name, 'Remove Group') ){
-                Invoke-RestMethod -Method Delete `
+                $Response = Invoke-RestMethod -Method Delete `
                                               -Uri $RequestUrl `
                                               -Headers $script:TVConfig.Header `
                                               -ContentType 'application/json' `
                                               -ErrorAction SilentlyContinue -ErrorVariable respError     
-                return $true                                    
+                return ( (Get-TVGroup -Token $Token -Name $InputObject.Name) -eq $null )                                
             }
         }
         catch{           
             Write-Host $_
             $ErrJson = $_ | convertFrom-json 
             Write-Error -Message ("err: {0}" -f $ErrJson.message    )
+            return $false
         }
 
     }
@@ -1322,7 +1378,7 @@ function New-TVGroup
     .DESCRIPTION
     Create a new TeamViewer Group
     .PARAMETER Token
-    The API token generated on the Teamviewer Management Console
+    The Teamviewer API token generated on the Teamviewer Management console (https://login.teamviewer.com)
     .PARAMETER Name
     The name of the new group
     .PARAMETER CompanyUserID 
@@ -1334,7 +1390,6 @@ function New-TVGroup
     None. You cannot pipe objects to New-TVGroup
     .OUTPUTS
     TVGroup. New-TVGroup will return the newly created TVGroup object  
-
     .NOTES 
     Author: Marco Micozzi
     .LINK
@@ -1404,9 +1459,34 @@ function New-TVGroup
     }
 
 }
-
 function Get-TVGroup
 {
+    <#
+    .SYNOPSIS
+    Get TeamViewer group information
+    .DESCRIPTION
+    Get information about a teamviewer group via the API
+     .PARAMETER Token
+    The Teamviewer API token generated on the Teamviewer Management console (https://login.teamviewer.com)
+    .PARAMETER Name
+    The name of the group to fetch
+    .PARAMETER Shared
+    Wether or not to list shared groups.
+    .PARAMETER CompanyUserID
+    The admin ID
+    .EXAMPLE
+    Get-TVGroup -Token $Env:TeamViewerToken
+    Get all Teamviewer groups
+    .EXAMPLE
+    Get-TVGroup -Token $ENV:TeamviewerToken -Name "TestGrp"
+    Get a group with the name 'TestGrp'
+    .NOTES
+    Author: Marco Micozzi
+    .LINK
+    New-TVGroup
+    .LINK
+    Remove-TVGroup
+    #>
     [CmdletBinding(
         HelpUri = 'http://psteamviewer.readthedocs.io/en/latest/cmdlets/Get-TVGroup/'
     )]
@@ -1487,6 +1567,66 @@ function Get-TVGroup
 #endregion Groups
 
 #region Local
+
+function Get-TVClientID{
+    <#
+    .SYNOPSIS
+    Get the clientID from one or more (remote) computers
+    .DESCRIPTION
+    Retreives the CLientID registry value from one or more computers in the same LAN.
+    .PARAMETER ComputerName
+    The name(s) of the computer(s) to fetch the ClientID from.
+    .EXAMPLE
+    Get-TVClientID -ComputerName MarcoPC01
+    Retreives the ClientID from the computer MarcoPC01 in the current LAN
+    .NOTES
+    This CmdLet will only work on computers in the same LAN.
+    A Test-Connection will check if the remote computer(s) is/are available.
+    Remote Registry has to be enabled to make this work.
+    Author: Marco Micozzi
+    
+    #>
+    #TODO: Test the Get-TVClientID CmdLet
+    [CmdLetBinding()]
+    param(        
+        [Parameter(
+            Mandatory = $false
+        )]
+        [string[]] $ComputerName = $env:COMPUTERNAME    
+    )
+    begin
+    {
+        [string] $KeyPath = 'SOFTWARE\\WOW6432Node\\TeamViewer'
+    }
+    process
+    {        
+        foreach ( $Computer in $ComputerName )
+        {
+            if ( Test-Connection -ComputerName $Computer -Count 1 -Quiet ) 
+            {
+                [Microsoft.Win32.RegistryKey] $HKEY_LM = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey('LocalMachine', $Computer)
+                [Microsoft.Win32.RegistryKey] $TeamViewerKey = $HKEY_LM.OpenSubKey($KeyPath)
+                if ( $TeamViewerKey -ne $null )
+                {
+                    [hashtable] $Properties = @{
+                        ComputerName = $Computer
+                        ClientID = $TeamViewerKey.GetValue('ClientID')
+                    }
+                    New-Object -TypeName PSObject -Property $Properties                
+                }
+                else
+                {
+                    Write-Error -Message ('The key: "HKLM:\{0}" was not found on computer: "{1}"!' -f $KeyPath, $Computer)
+                }
+            }
+            else
+            {
+                Write-Error -Message ('The computer: "{0}" is offline!' -f $Computer)
+            }
+        }
+    }
+}
+
 function Get-TVInstallDir
 {
     <#
@@ -1510,25 +1650,96 @@ function Get-TVInstallDir
 }
 function Start-TVRemoteControl
 {
+    <#
+    .SYNOPSIS
+    Start a remote control session.
+    .DESCRIPTION
+    Start a remote control session.
+    .PARAMETER RemoteControlID
+    The remote control ID of a computer
+    .PARAMETER InputObject
+    The TVDevice Object returned by the Get-TVDevice CmdLet
+    .PARAMETER Password
+    The password to connect to this computer.
+    .PARAMETER Mode
+    The mode to connect to the remote computer.
+    Defaults to 'Remote Control' if omitted.
+    Valid values are 'vpn' or 'FileTransfer'
+    .EXAMPLE
+    Start-TVRemoteControl -RemoteControlID 'abc123'
+    Starts a session to the device with remotecontrol ID abc123 and prompts for a password
+    .EXAMPLE
+    Get-TVDevice | Where-Object {$_.Alias -eq 'PC0001'} |  Start-TVRemoteControl 
+    Start a remote control session to the computer with name PC0001
+    .NOTES
+    Author: Marco Micozzi
+
+    #>
     [CmdletBinding()]
     param(
 
         [Parameter(
-            Mandatory = $true
+            Mandatory = $true,
+            ParameterSetName = 'ByRemoteControlID'
         )]
-        [string] $RemoteControlID
+        [ValidateNotNullOrEmpty()]
+        [string] $RemoteControlID, 
+
+
+        [Parameter(
+            Mandatory = $true, 
+            ParameterSetName = 'ByInputObject'
+        )]
+        [ValidateNotNull()]
+        [TVDevice] $InputObject,
+
+        [Parameter(
+            Mandatory = $false
+        )]
+        [securestring] $Password = $Null,
+
+        [Parameter(
+            Mandatory = $false
+        )]
+        [ValidateSet("FileTransfer", "vpn")]
+        [ValidateNotNullOrEmpty()]
+        [string] $Mode = $null
     )
 
     $InstallDir = Get-TVInstallDir
 
+    # Make sure Teamviewer is installed
     if ( $InstallDir -ne $null )
-    {
+    {       
 
-        Start-Process -FilePath $InstallDir -ArgumentList ('-i {0}' -f $RemoteControlID)
+        # If the TVDevice was passed as an argument, get the RemoteControlID value.
+        if ( $PSCmdlet.ParameterSetName -eq 'ByInputObject')
+        {
+            $RemoteControlID = $InputObject.RemoteControlID
+        }
+
+        # Create the argument string
+        [string] $Arguments = ('-i {0}' -f $RemoteControlID)
+
+        # Add the password if supplied
+        if ( -not ( [string]::IsNullOrEmpty($Password)))
+        {
+            $Arguments += (' -P {0}' -f (New-Object PSCredential "user",$Password).GetNetworkCredential().Password)
+        }
+
+        # add the mode if supplied
+        if ( -not ( [string]::IsNullOrEmpty($Mode)))
+        {
+            $Arguments += (' -m {0}' -f $Mode)
+        }
+
+        # Start the session
+        Start-Process -FilePath $InstallDir -ArgumentList $Arguments
+
+        # not sure about this one...
         #Invoke-WebRequest -Uri ('https://start.teamviewer.com/device/{0}' -f $RemoteControlID)
 
     }
-
 }
 
 #endregion

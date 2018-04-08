@@ -12,7 +12,7 @@
 RootModule = 'PSTeamViewer.psm1'
 
 # Version number of this module.
-ModuleVersion = '0.1.2'
+ModuleVersion = '0.1.3'
 
 # Supported PSEditions
 # CompatiblePSEditions = @()
@@ -74,9 +74,10 @@ FunctionsToExport = @(
                     'Test-TVToken', 
                     'Get-TVOauth2Token', 'Get-TVOAuth2Authorization'
                     'Get-TVAccount', 
-                    'Get-TVUser', 'Set-TVUser', 'New-TVUser', 
-                    'Get-TVGroup', 'New-TVGroup', 'Remove-TVGroup',
-                    'Get-TVDevice', 'Set-TVDevice', 'Start-TVRemoteControl'
+                    'New-TVUser',  'Get-TVUser', 'Set-TVUser', 
+                    'New-TVGroup', 'Get-TVGroup', 'Remove-TVGroup',
+                    'Get-TVDevice', 'Set-TVDevice', 
+                    'Start-TVRemoteControl'
                     )
 
 # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.
