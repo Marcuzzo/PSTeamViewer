@@ -106,12 +106,12 @@ Task Deploy -Depends Test {
                 ErrorAction = 'Stop'
             }
             Publish-Module @PM
-            Write-Host "Rubrik PowerShell Module version $newVersion published to the PowerShell Gallery." -ForegroundColor Cyan
+            Write-Host "TeamViewer Module published to the PowerShell Gallery." -ForegroundColor Cyan
         }
         Catch 
         {
-            # Sad panda; it broke
-            Write-Warning "Publishing update $newVersion to the PowerShell Gallery failed."
+            
+            Write-Warning "Publishing to the PowerShell Gallery failed."
             throw $_
         }
     }
