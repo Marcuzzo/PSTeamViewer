@@ -625,7 +625,7 @@ function New-TVUser
         
         Try
         {        
-            Invoke-RestMethod -Method Post `
+            $response = Invoke-RestMethod -Method Post `
                                           -Uri $RequestUrl `
                                           -Headers $script:TVConfig.Header `
                                           -Body ( $Params | ConvertTo-Json ) `
@@ -767,7 +767,7 @@ function Set-TVUser
         Try
         {
             
-            Invoke-RestMethod -Method Put `
+            $response = Invoke-RestMethod -Method Put `
                                           -Uri $RequestUrl `
                                           -Headers $script:TVConfig.Header `
                                           -Body ( $Params | ConvertTo-Json ) `
@@ -784,7 +784,7 @@ function Set-TVUser
             # Write-Host "StatusDescription:" $_.Exception.Response.StatusDescription
             # Write-Host "StatusCode:" ([int]$_.Exception.Response.StatusCode)
             $ErrJson = $_.ErrorDetails.Message | convertFrom-json 
-            Write-Error -Message $ErrJson.error_description
+            Write-Error -Message ('Error: {0}' -f $ErrJson.error_description)
             #.Message.error_description
         }
         
