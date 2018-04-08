@@ -59,7 +59,7 @@ Removes the group with GroupID 'GRP1'
 ## PARAMETERS
 
 ### -Token
-{{Fill Token Description}}
+The Teamviewer API token generated on the Teamviewer Management console (https://login.teamviewer.com)
 
 ```yaml
 Type: String
@@ -170,7 +170,11 @@ For more information, see about_CommonParameters (http://go.microsoft.com/fwlink
 
 ## INPUTS
 
+### TVGroup. The objects returned by the Get-TVGroup can be piped to the Remove-TVGroup CmdLet.
+
 ## OUTPUTS
+
+### None. This CmdLet doesn't produce any output
 
 ## NOTES
 Author: Marco Micozzi

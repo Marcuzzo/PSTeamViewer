@@ -8,38 +8,99 @@ schema: 2.0.0
 # Start-TVRemoteControl
 
 ## SYNOPSIS
-{{Fill in the Synopsis}}
+Start a remote control session.
 
 ## SYNTAX
 
+### ByRemoteControlID
 ```
-Start-TVRemoteControl [-RemoteControlID] <String> [<CommonParameters>]
+Start-TVRemoteControl -RemoteControlID <String> [-Password <SecureString>] [-Mode <String>]
+ [<CommonParameters>]
+```
+
+### ByInputObject
+```
+Start-TVRemoteControl -InputObject <TVDevice> [-Password <SecureString>] [-Mode <String>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-{{Fill in the Description}}
+Start a remote control session.
 
 ## EXAMPLES
 
-### Example 1
+### EXAMPLE 1
 ```
-PS C:\> {{ Add example code here }}
+Start-TVRemoteControl -RemoteControlID 'abc123'
 ```
 
-{{ Add example description here }}
+Starts a session to the device with remotecontrol ID abc123 and prompts for a password
+
+### EXAMPLE 2
+```
+Get-TVDevice | Where-Object {$_.Alias -eq 'PC0001'} |  Start-TVRemoteControl
+```
+
+Start a remote control session to the computer with name PC0001
 
 ## PARAMETERS
 
 ### -RemoteControlID
-{{Fill RemoteControlID Description}}
+The remote control ID of a computer
+
+```yaml
+Type: String
+Parameter Sets: ByRemoteControlID
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -InputObject
+The TVDevice Object returned by the Get-TVDevice CmdLet
+
+```yaml
+Type: TVDevice
+Parameter Sets: ByInputObject
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Password
+The password to connect to this computer.
+
+```yaml
+Type: SecureString
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Mode
+The mode to connect to the remote computer.
+Defaults to 'Remote Control' if omitted.
+Valid values are 'vpn' or 'FileTransfer'
 
 ```yaml
 Type: String
 Parameter Sets: (All)
 Aliases:
 
-Required: True
-Position: 0
+Required: False
+Position: Named
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -51,12 +112,9 @@ For more information, see about_CommonParameters (http://go.microsoft.com/fwlink
 
 ## INPUTS
 
-### None
-
 ## OUTPUTS
 
-### System.Object
-
 ## NOTES
+Author: Marco Micozzi
 
 ## RELATED LINKS

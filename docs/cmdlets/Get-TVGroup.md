@@ -24,13 +24,22 @@ Get information about a teamviewer group via the API
 
 ### EXAMPLE 1
 ```
-Get-TVGroup -Token $Env:
+Get-TVGroup -Token $Env:TeamViewerToken
 ```
+
+Get all Teamviewer groups
+
+### EXAMPLE 2
+```
+Get-TVGroup -Token $ENV:TeamviewerToken -Name "TestGrp"
+```
+
+Get a group with the name 'TestGrp'
 
 ## PARAMETERS
 
 ### -Token
-The API token generated on the Teamviewer Management Console
+The Teamviewer API token generated on the Teamviewer Management console (https://login.teamviewer.com)
 
 ```yaml
 Type: String
@@ -100,5 +109,11 @@ For more information, see about_CommonParameters (http://go.microsoft.com/fwlink
 ### TVGroup
 
 ## NOTES
+Author: Marco Micozzi
 
 ## RELATED LINKS
+
+[New-TVGroup]()
+
+[Remove-TVGroup]()
+

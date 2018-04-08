@@ -31,7 +31,7 @@ Creates the group MyTestGroup
 ## PARAMETERS
 
 ### -Token
-The API token generated on the Teamviewer Management Console
+The Teamviewer API token generated on the Teamviewer Management console (https://login.teamviewer.com)
 
 ```yaml
 Type: String
