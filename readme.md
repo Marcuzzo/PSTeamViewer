@@ -7,9 +7,10 @@ This is a PowerShell module API wrapper for the [TeamViewer API](https://integra
 
 ## Description
 
-This project is still a work in progress
+This is a Powershell module to interact with the TeamViewer API.  
+*This is still a work in progress*
 
-## Install
+## Installing
 
 The module is available on [PowershellGallery](https://www.powershellgallery.com/packages/PSTeamViewer)
 
@@ -17,23 +18,13 @@ The module is available on [PowershellGallery](https://www.powershellgallery.com
 Install-Module -Name PSTeamViewer 
 ```
 
-## Available CmdLets
+## Documentation
 
-* Initialize-TVAPI
-* Test-TVToken
-* Get-TVOauth2Token
-* Get-TVAccount
-* Get-TVUser
-* Set-TVUser
-* New-TVUser
-* Get-TVGroup
-* New-TVGroup
-* Remove-TVGroup
-* Get-TVDevice
+The documentation of the CmdLets can be viewed on the terminal with Get-Help and in the online [documentation](http://psteamviewer.readthedocs.io/en/latest/).
 
 ## Examples
 
-```Powershell
+```powershell
 Import-Module PSTeamViewer
 
 # This CmdLet stores your token in a variable.
@@ -41,11 +32,16 @@ Import-Module PSTeamViewer
 Initialize-TVAPI -Token 'YOUR-TEAMVIEWER-TOKEN'
 
 # Get all users
-Get-TVUser 
+Get-TVUser
 
 # -or when you didn't call the Initialize-TVAPI CmdLet:
 Get-TVUser -Token 'YOUR-TEAMVIEWER-TOKEN'
 
 ```
 
-Example scripts can be found in the [example](./example) directory
+Example scripts can be found in the [example](./example) directory.
+
+## Contributing
+
+This module is still under development but basic functionality is present and somewhat tested.
+You are more then welcome contribute to this module. Check out the ( [online](http://psteamviewer.readthedocs.io/en/latest/) ) [documentation](./docs).
