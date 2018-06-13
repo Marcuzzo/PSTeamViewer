@@ -74,7 +74,7 @@ FunctionsToExport = @(
                     'Test-TVToken', 
                     'Get-TVOauth2Token', 'Get-TVOAuth2Authorization'
                     'Get-TVAccount', 
-                    'New-TVUser',  'Get-TVUser', 'Set-TVUser', 
+                    'New-TVUser',  'Get-TVUser', 'Set-TVUser', 'Get-TVUserGroups',
                     'New-TVGroup', 'Get-TVGroup', 'Remove-TVGroup', 'Add-TVGroupMember', 'Remove-TVGroupMember',
                     'Get-TVDevice', 'Set-TVDevice', 
                     'Start-TVRemoteControl'
