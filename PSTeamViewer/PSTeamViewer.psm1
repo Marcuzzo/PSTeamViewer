@@ -122,6 +122,8 @@ Class TVGroupUser : TVUserBase
 {
     [string] $Permissions = [string]::Empty
     [bool] $Pending = $false
+    
+
     TVGroupUser ( $ID, $Name, $Permissions, $Pending) 
     : base ( $ID, $Name) 
     {
@@ -133,8 +135,25 @@ Class TVGroupUser : TVUserBase
     {
         $this.Permissions = $Permissions
     }
+
+    TVGroupUser ( $TVGroupUser)
+    {
+        $this = $TVGroupUser        
+    }
 }
 
+Class TVUserGroup : TVGroupUser
+{
+    [string] $GroupID
+    [string] $GroupName
+    TVUserGroup ( $TVGroupUser, $ID, $Name) 
+    : base ( $TVGroupUser.ID, $TVGroupUser.Name, $TVGroupUser.Permissions, $TVGroupUser.Pending) 
+    {
+        $this.GroupID = $ID
+        $this.GroupName = $Name
+
+    }
+}
 
 Class TVGroup 
 {
@@ -1241,6 +1260,39 @@ function Get-TVDevice
     }
 
 }
+
+function New-TVDevice
+{
+    [CmdletBinding()]
+    param(
+
+        [Parameter(
+            Mandatory=$false
+        )]
+        [string] $RemoteControlID = [string]::Empty, 
+
+        [Parameter(
+            Mandatory=$false
+        )]
+        [string] $GroupID = [string]::Empty,  
+
+        [Parameter(
+            Mandatory = $false
+        )]
+        [string] $Description = [string]::Empty,
+
+        [Parameter(
+            Mandatory = $false
+        )]
+        [string] $Alias = [string]::Empty,
+ 
+        [Parameter(
+            Mandatory = $false
+        )]
+        [securestring] $Password = $null
+    )
+}
+
 #endregion Devices
 
 #region Groups
@@ -1564,6 +1616,27 @@ function Get-TVGroup
     end {}
 }
 
+function Get-TVUserGroups
+{
+    [CmdletBinding()]
+    param(
+        [Parameter(
+            Mandatory = $true            
+        )]
+        [TVUser] $User
+    )
+    process{
+        Get-TVGroup | ForEach-Object {
+            $Group = $_
+            $Group.SharedWith | 
+                Where-Object { $_.ID -eq $User.ID } | ForEach-Object {
+                        Write-Verbose -Message ('Got group: {0} with ID: {1}' -f $Group.Name, $Group.ID)
+                        [TVUserGroup]::new($_, $Group.ID, $Group.Name)                        
+                    }
+                }
+    }
+}
+
 function Remove-TVGroupMember{
     [CmdletBinding()]
     param(
@@ -1621,7 +1694,7 @@ function Add-TVGroupMember
         [Parameter(
             Mandatory = $true
         )]
-        [TVUser] $User,
+        [TVUser[]] $TVUser,
 
         [Parameter(
             Mandatory = $false
@@ -1631,25 +1704,34 @@ function Add-TVGroupMember
     )
 
     begin
-    {        
+    {
+    
         # Make sure to have a token
-       # if ( [string]::IsNullOrEmpty($Token) ) 
-       # {
-       #     throw (New-Object -TypeName System.Exception -ArgumentList $script:TOKEN_MISSING_ERROR)
-       # }  
+        if ( -not ( $script:TVConfig.TokenValid ) )
+        # if ( [string]::IsNullOrEmpty($Token) ) 
+        {
+            throw (New-Object -TypeName System.Exception -ArgumentList $script:TOKEN_MISSING_ERROR)
+        }  
         [string] $RequestUrl = ('{0}/api/{1}/groups/{2}/share_group' -f $script:TVConfig.BaseUrl, $script:TVConfig.ApiVersion, $Group.ID)              
+
+        [hashtable] $Params = @{
+            users = @(
+            )           
+        }  
     }
 
     process {
-        [hashtable] $Params = @{
-            users = @(
-                @{
-                    userid = $User.ID
-                    permissions = $Permission
-                }
-            )           
-        }  
-       
+
+        foreach ( $User in $TVUser)
+        {
+            $TVUserObject = @{
+                userid = $User.ID
+                permissions = $Permission
+            }
+
+            $Params.users += $TVUserObject
+        }
+        
         Invoke-RestMethod -Method Post `
                           -Uri $RequestUrl `
                           -Headers $script:TVConfig.Header `
