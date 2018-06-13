@@ -50,7 +50,7 @@ InModuleScope PSTeamViewer {
         
         Mock -CommandName Invoke-RestMethod -Verifiable -MockWith {
             if ( ( ! ( [string]::IsNullOrEmpty($Body.name))) -or ( ! ( [string]::IsNullOrEmpty($Body.email)))) {
-                return (  "{`"users`":[$TVUserTestData]}" | ConvertFrom-Json )
+                return (  ('{{"users":[{0}]}}' -f $TVUserTestData) | ConvertFrom-Json )
             }
             else{
                 return (  $TVUserTestData | ConvertFrom-Json )
@@ -74,18 +74,18 @@ InModuleScope PSTeamViewer {
         } -ModuleName PSTeamViewer
 
         Mock -CommandName Invoke-RestMethod -Verifiable -MockWith {
-            $user_id = ('u{0}' -f (Get-Random -Maximum 999999999 -Minimum 1000000) )
+            $user_id = ('u{0}' -f (Get-Random -Maximum 9999999 -Minimum 1000000) )
             
             $str = @'
-            "id":"u{0}",
+            {{"id":"{0}",
             "name":"{1}",
             "permissions":"EditConnections,EditFullProfile,ViewOwnAssets,EditOwnCustomModuleConfigs,ViewOwnConnections",
             "active":true,
             "log_sessions":true,
-            "show_comment_window":false
+            "show_comment_window":false}}
 '@
             $TVUSerData = $str -f $user_id, $Name
-            return (    $TVUserTestData| ConvertFrom-Json )
+            return (    $TVUSerData| ConvertFrom-Json )
         } -ParameterFilter {
             $uri -match "/api/v1/users" -and  $Method -eq 'Post'
         } -ModuleName PSTeamViewer
