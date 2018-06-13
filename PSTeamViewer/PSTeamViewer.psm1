@@ -1564,6 +1564,104 @@ function Get-TVGroup
     end {}
 }
 
+function Remove-TVGroupMember{
+    [CmdletBinding()]
+    param(
+        [Parameter(
+            Mandatory = $true            
+        )]
+        [TVGroup] $Group,
+
+        [Parameter(
+            Mandatory = $true
+        )]
+        [TVUser] $User
+    )
+
+    begin
+    {        
+        # Make sure to have a token
+       # if ( [string]::IsNullOrEmpty($Token) ) 
+       # {
+       #     throw (New-Object -TypeName System.Exception -ArgumentList $script:TOKEN_MISSING_ERROR)
+       # }  
+        [string] $RequestUrl = ('{0}/api/{1}/groups/{2}/unshare_group' -f $script:TVConfig.BaseUrl, $script:TVConfig.ApiVersion, $Group.ID)              
+    }
+
+    process
+    {
+        [hashtable] $Params = @{
+            users = @(
+                $User.ID                               
+            )           
+        }  
+        
+        Invoke-RestMethod -Method Post `
+                            -Uri $RequestUrl `
+                            -Headers $script:TVConfig.Header `
+                            -Body ($Params | ConvertTo-Json) `
+                            -ContentType 'application/json' `
+                            -ErrorAction SilentlyContinue `
+                            -ErrorVariable respError
+    
+        
+    }
+}
+
+function Add-TVGroupMember
+{
+    [CmdLetBinding()]
+    param(
+
+        [Parameter(
+            Mandatory = $true            
+        )]
+        [TVGroup] $Group,
+
+        [Parameter(
+            Mandatory = $true
+        )]
+        [TVUser] $User,
+
+        [Parameter(
+            Mandatory = $false
+        )]
+        [ValidateSet('read', 'readwrite')]
+        [string] $Permission = 'read'
+    )
+
+    begin
+    {        
+        # Make sure to have a token
+       # if ( [string]::IsNullOrEmpty($Token) ) 
+       # {
+       #     throw (New-Object -TypeName System.Exception -ArgumentList $script:TOKEN_MISSING_ERROR)
+       # }  
+        [string] $RequestUrl = ('{0}/api/{1}/groups/{2}/share_group' -f $script:TVConfig.BaseUrl, $script:TVConfig.ApiVersion, $Group.ID)              
+    }
+
+    process {
+        [hashtable] $Params = @{
+            users = @(
+                @{
+                    userid = $User.ID
+                    permissions = $Permission
+                }
+            )           
+        }  
+       
+        Invoke-RestMethod -Method Post `
+                          -Uri $RequestUrl `
+                          -Headers $script:TVConfig.Header `
+                          -Body ($Params | ConvertTo-Json) `
+                          -ContentType 'application/json' `
+                          -ErrorAction SilentlyContinue `
+                          -ErrorVariable respError
+
+    }
+    
+}
+
 #endregion Groups
 
 #region Local
