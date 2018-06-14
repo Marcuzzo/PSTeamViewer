@@ -1618,15 +1618,67 @@ function Get-TVGroup
 
 function Get-TVUserGroups
 {
+ <#
+    .SYNOPSIS
+    Get the groups a user is member of.
+    .DESCRIPTION
+    Get a list of groups the user is member of
+     .PARAMETER Token
+    The Teamviewer API token generated on the Teamviewer Management console (https://login.teamviewer.com)
+    .PARAMETER User
+    The TeamViewer User as retreived by Get-TVUser
+-   .PARAMETER Name
+    The Name of the user to fetch the groups for.
+    .EXAMPLE
+    Get-TVGroup -Token $Env:TeamViewerToken
+    Get all Teamviewer groups
+    .EXAMPLE
+    Get-TVUserGroups -Token $ENV:TeamviewerToken -Name "JohnDoe"
+    Get all groups of which the user 'JohnDoe' is member of.
+    .EXAMPLE
+    Get-TVUserGroups -Token $ENV:TeamviewerToken -User (Get-TVUser -Token $ENV:TeamviewerToken -Name "JohnDoe" )
+    Get all groups of which the user 'JohnDoe' is member of.
+    .NOTES
+    Author: Marco Micozzi
+    .LINK
+    New-TVGroup
+    .LINK
+    Remove-TVGroup
+    #>
     [CmdletBinding()]
     param(
         [Parameter(
-            Mandatory = $true            
+            Mandatory = $true,
+            ValueFromPipeline = $true,
+            ValueFromPipelineByPropertyName = $true,
+            ParameterSetName = 'ByInputObject'    
         )]
-        [TVUser] $User
+        [TVUser] $User,
+
+        [Parameter(
+            Mandatory = $true,
+            ParameterSetName = 'ByName'
+        )]
+        [string] $Name,
+
+        [Parameter(
+            Mandatory = $false
+        )]
+        [string] $Token = $script:TVConfig.AccessToken
     )
+    begin
+    {
+        if ( [string]::IsNullOrEmpty($Token) ) {
+            throw (New-Object -TypeName System.Exception -ArgumentList $script:TOKEN_MISSING_ERROR)
+        }    
+
+        if ( $PSCmdlet.ParameterSetName -eq 'ByName')
+        {
+            $User = Get-TVUser -Token $Token -Name $Name
+        }
+    }
     process{
-        Get-TVGroup | ForEach-Object {
+        Get-TVGroup -Token $Token | ForEach-Object {
             $Group = $_
             $Group.SharedWith | 
                 Where-Object { $_.ID -eq $User.ID } | ForEach-Object {
