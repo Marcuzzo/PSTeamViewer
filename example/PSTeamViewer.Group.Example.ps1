@@ -8,7 +8,10 @@ param(
     [Parameter(
         Mandatory = $true
     )]
-    [string] $Email
+    [string[]] $Email, 
+
+    [Parameter()]
+    [switch] $Remove
 
 )
 
@@ -20,10 +23,24 @@ Import-Module "$PSScriptRoot\..\PSTeamViewer\PSTeamViewer.psd1"
 # Initialize the API
 Initialize-TVAPI -Token $Token 
 
+# Get the group object
 $group = Get-TVGroup -Token $Token -Name $GroupName
-$user = Get-TVuser -Token $Token -Email $Email
 
-Add-TVGroupMember -Group $group -User $user 
-#Remove-TVGroupMember -Group $group -User $user 
+
+foreach ( $EmailAddress in $Email )
+{
+    $user = Get-TVuser -Token $Token -Email $EmailAddress
+
+    if ( $Remove.IsPresent)
+    {
+        Remove-TVGroupMember -Group $group -User $user 
+    }
+    else
+    {
+        Add-TVGroupMember -Group $group -TVUser $user 
+    }
+
+}
+
 
 Remove-Module -Name PSTeamViewer
