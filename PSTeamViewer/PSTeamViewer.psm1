@@ -1421,7 +1421,6 @@ function Remove-TVGroup
     }
 
 }
-
 function New-TVGroup
 {
     <#
@@ -1618,7 +1617,7 @@ function Get-TVGroup
 
 function Get-TVUserGroups
 {
- <#
+<#
     .SYNOPSIS
     Get the groups a user is member of.
     .DESCRIPTION
@@ -1627,7 +1626,7 @@ function Get-TVUserGroups
     The Teamviewer API token generated on the Teamviewer Management console (https://login.teamviewer.com)
     .PARAMETER User
     The TeamViewer User as retreived by Get-TVUser
--   .PARAMETER Name
+    .PARAMETER Name
     The Name of the user to fetch the groups for.
     .EXAMPLE
     Get-TVGroup -Token $Env:TeamViewerToken
@@ -1644,7 +1643,7 @@ function Get-TVUserGroups
     New-TVGroup
     .LINK
     Remove-TVGroup
-    #>
+#>
     [CmdletBinding()]
     param(
         [Parameter(
