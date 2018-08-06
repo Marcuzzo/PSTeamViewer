@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<types>
+  <type>
+    <name>TVUser</name>
+    <members>
+      <scriptproperty>
+        <name>ID</name>
+        <getscriptblock>
+          $this.ID.tostring()
+        </getscriptblock>
+      </scriptproperty>
+      
+      <scriptproperty>
+        <name>Name</name>
+        <getscriptblock>
+          $this.Name.tostring()
+        </getscriptblock>
+      </scriptproperty>
+    </members>
+  </type>
+ 
+</types>

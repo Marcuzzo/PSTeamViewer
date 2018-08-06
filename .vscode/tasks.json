@@ -1,0 +1,65 @@
+{
+    
+    "version": "2.0.0",
+    
+    "windows": {
+        "command": "${env:windir}/System32/WindowsPowerShell/v1.0/powershell.exe"
+    },
+    
+    "linux": {
+        "command": "/usr/bin/powershell"
+    },
+    
+    "osx": {
+        "command": "/usr/local/bin/powershell"
+    },
+
+    "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared"
+    },
+
+    "args": [
+        "-NoProfile", "-ExecutionPolicy", "Bypass"
+    ],
+
+    "tasks": [
+
+        {
+            "taskName": "Test",
+            "type": "process",
+            "group": {
+                "kind": "test",
+                "isDefault": true
+            },                    
+            "args": [
+                "Write-Host 'Invoking Pester...'",
+                "$ProgressPreference = 'SilentlyContinue';",
+                "Invoke-Pester -PesterOption @{IncludeVSCodeMarker=$true};",
+                "Invoke-Command { Write-Host 'Completed Test task in task runner.' }"
+            ],
+            "suppressTaskName": true,
+            "problemMatcher": "$pester"
+        },
+
+        {
+            "taskName" : "Build Help",
+            "type": "process",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "args": [
+                "Write-Host -Object 'Building Help';",
+                "./build/build.help.ps1 -Compile;",
+                "Write-Host -Object 'Help built';"
+            ],
+            "suppressTaskName": true
+
+        }
+
+    ]
+
+}
