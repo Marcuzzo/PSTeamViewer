@@ -85,7 +85,7 @@ InModuleScope PSTeamViewer {
             "show_comment_window":false
 '@
             $TVUSerData = $str -f $user_id, $Name
-            return (    $TVUserTestData| ConvertFrom-Json )
+            return (    $TVUSerData| ConvertFrom-Json )
         } -ParameterFilter {
             $uri -match "/api/v1/users" -and  $Method -eq 'Post'
         } -ModuleName PSTeamViewer
