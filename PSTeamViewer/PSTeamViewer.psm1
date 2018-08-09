@@ -44,7 +44,7 @@ class TVPrincipal
 {
     [ValidateNotNullOrEmpty()][string]$ID
     [ValidateNotNullOrEmpty()][string]$Name       
-    TVUserBase($ID, $Name){
+    TVPrincipal($ID, $Name){
         $this.ID = $ID
         $this.Name = $Name
     }
@@ -250,24 +250,25 @@ function Initialize-TVUserObject
         [psobject] $Json
     )
     [string] $QuickSupportID = [System.String]::Empty
-    if ( $Json.custom_quicksupport_id -ne $null )
+    if ( $null -ne $Json.custom_quicksupport_id )
     {
         $QuickSupportID = $Json.custom_quicksupport_id
     }    
     [string] $QuickJoinID = [System.String]::Empty
-    if( $Json.custom_quickjoin_id -ne $null)
+    if( $null -ne $Json.custom_quickjoin_id )
     {
         $QuickJoinID = $Json.custom_quickjoin_id
     }    
     [string[]] $Permissions = $Json.permissions -split ','
-    [TVUser] $TVUser = New-Object TVUser -ArgumentList $Json.id, `
-                                                       $Json.name, `
-                                                       $Permissions, `
-                                                       $Json.active, `
-                                                       $Json.log_sessions, `
-                                                       $Json.show_comment_window, `
-                                                       $QuickSupportID, `
-                                                       $QuickJoinID
+
+    foreach($permission in $permissions  )
+    {
+        Write-Verbose -Message ('Got Permission: "{0}".' -f $permission)
+
+    }
+    #Write-Verbose -Message ('ID: {0}", Name: {1}, email : {2}' -f $Json.id,$Json.name, $Json.email)
+    [TVUser] $TVUser = New-Object TVUser -ArgumentList $Json.id, $Json.name, $Permissions, $Json.active, $Json.log_sessions, `
+                                                       $Json.show_comment_window, $QuickSupportID, $QuickJoinID, $Json.email
     Write-Output -InputObject $TVUser
 }
 
