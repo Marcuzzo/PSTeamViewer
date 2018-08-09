@@ -1,5 +1,7 @@
+<#
+    Powershell Module
+#>
 #region Classes
-
 class TVTokenException : System.Exception
 {
     [string] $Error
@@ -207,7 +209,12 @@ function Invoke-TVApiRequest
         [string] $Method = 'GET',
 
         [Parameter()]
-        [hashtable] $RequestBody = @{}
+        [hashtable] $RequestBody = @{}, 
+
+        [Parameter(
+            Mandatory = $false
+        )]
+        [string] $ResourceID = [string]::Empty
     )
 
     begin
@@ -219,13 +226,31 @@ function Invoke-TVApiRequest
             Authorization = ("Bearer {0}" -f $Token)
         }            
         [string] $RequestUrl = ('{0}/api/{1}/{2}' -f $BaseUrl, $ApiVersion, $Resource)   
+
+        # Add the resource ID when available
+        if ( ! ( [string]::IsNullOrEmpty($ResourceID)))
+        {
+            $RequestUrl += ('/{0}' -f $ResourceID)
+        }
+        #Write-Verbose -Message ('Running RequestURL: {0}' -f $RequestURL)
     }
     
     process
     {
         Write-Verbose -Message ('Request URL: "{0}".' -f $RequestUrl)
-        try{        
-            $response = Invoke-RestMethod -Uri $RequestUrl -Headers $Header -Body $RequestBody -Method $Method 
+        try{
+            
+            # PUT and POST require JSON data    
+            if ( $Method -ne 'GET' )
+            {
+                $response = Invoke-RestMethod -Uri $RequestUrl -Headers $Header -Body ( $RequestBody | ConvertTo-Json ) -Method $Method -ContentType 'application/json'
+            }
+            else
+            {
+                $response = Invoke-RestMethod -Uri $RequestUrl -Headers $Header -Body $RequestBody -Method $Method
+            }
+
+            
             Write-Verbose -Message 'returning tvobject'
             Write-Output -InputObject $response
         }
@@ -293,10 +318,9 @@ function Test-TVApi
 
 #region Users
 
-
 function New-TVUser
 {
- <#
+    <#
     .SYNOPSIS
     Create a new Teamviewer user.
     .DESCRIPTION
@@ -335,7 +359,7 @@ function New-TVUser
         [Parameter(
             Mandatory = $true
         )]
-        [string] $Token ,
+        [string] $Token,
  
         [Parameter(
             Mandatory = $true, 
@@ -423,13 +447,12 @@ function New-TVUser
         finally
         {
             Write-Verbose $response
-        }
-
-        
+        }        
     }
 }
 
-function Get-TVUser{
+function Get-TVUser
+{
     [OutputType([TVUser])]  
     [CmdletBinding(DefaultParameterSetName="All")]  
     param(
@@ -486,25 +509,31 @@ function Get-TVUser{
                 foreach ( $User in $UserID) 
                 {
                     Write-Verbose -Message ('Processing ID: "{0}".' -f $User)
-                    $response = Invoke-TVApiRequest -Token $Token -Resource "users/$User" -Method GET -RequestBody $RequestBody -Verbose
+                    $response = Invoke-TVApiRequest -Token $Token -Resource users -ResourceID $User -Method GET -RequestBody $RequestBody -Verbose
                     Write-Output -InputObject ( Initialize-TVUserObject -Json $response )                    
                 }
             }
 
             { ( $_ -eq 'ByName' )  -or ( $_ -eq 'ByEmail' ) -or ( $_ -eq 'All') } {              
+                
                 Write-Debug -Message 'The received parameters are Name, Email or none'                           
+                
                 if ( $PSCmdlet.ParameterSetName -eq 'ByName')
                 {
                     Write-Verbose -Message ('Checking by name: "{0}".' -f $Name)                    
                     $RequestBody.name = $Name
                 }
+
                 if ( $PSCmdlet.ParameterSetName -eq 'ByEmail')
                 {
                     $RequestBody.email = @{$true = $Email -join ', '; $false = $Email -join ''}[ ($Email.Count -ge 2)]   
                     Write-Verbose -Message ('Checking by mail: "{0}".' -f $RequestBody.email )    
                 }
-                $response = Invoke-TVApiRequest -Token $Token -Resource "users" -Method GET -RequestBody $RequestBody -Verbose 
-                Write-Verbose -Message ('Response: "{0}".' -f $response.users )
+
+                $response = Invoke-TVApiRequest -Token $Token -Resource users -Method GET -RequestBody $RequestBody -Verbose 
+                
+                Write-Verbose -Message ('Response: "{0}".' -f $response )#.users )
+                
                 $Response.users | ForEach-Object {       
                     Write-Verbose -Message $_            
                     Write-Output -InputObject ( Initialize-TVUserObject -Json $_ )
@@ -521,6 +550,140 @@ function Get-TVUser{
     end{}
 }
 
+function Set-TVUser
+{
+    [CmdletBinding()]
+    [OutputType([TVUser])]
+    param(
+        
+        [Parameter(
+            Mandatory = $true
+        )]
+        [string] $Token,
+
+         [Parameter(
+            Mandatory = $true, 
+            ParameterSetName = 'ByIdentity', 
+            ValueFromPipeline = $true)]
+        [ValidateNotNull()]
+        [TVUser] $Identity,
+
+        [Parameter(
+            Mandatory = $true, 
+            ParameterSetName = 'ById')]
+        [string] $UserID,
+
+        [Parameter(
+            Mandatory = $false
+        )]
+        [ValidateNotNullOrEmpty()]
+        [string] $Name = $null,
+        
+        [Parameter(
+            Mandatory = $false
+        )]
+        [ValidateNotNullOrEmpty()]
+        [string] $Email = $null,
+        
+        [Parameter(
+            Mandatory = $false
+        )]
+        [ValidateNotNullOrEmpty()]
+        [ValidateSet('None', 'ManageAdmins', 'ManageUsers', 'ShareOwnGroups', 'ViewAllConnections', 
+                     'ViewOwnConnections', 'EditConnections', 'DeleteConnections', 'EditFullProfile', 
+                     'ManagePolicies', 'AssignPolicies', 'AcknowledgeAllAlerts', 'AcknowledgeOwnAlerts', 
+                     'ViewAllAssets', 'ViewOwnAssets', 'EditAllCustomModuleConfigs', 'EditOwnCustomModuleConfigs')]
+        [string[]] $Permissions = $null,
+        
+        [Parameter(
+            Mandatory = $false
+        )]
+        [ValidateNotNullOrEmpty()]
+        [securestring] $Password = $null,
+        
+        [Parameter(
+            Mandatory = $false
+        )]
+        [bool] $Active,
+        
+        [Parameter(
+            Mandatory = $false
+        )]
+        [ValidateNotNullOrEmpty()]
+        [string] $QuickJoinID = $null,
+        
+        [Parameter(
+            Mandatory = $false
+        )]
+        [ValidateNotNullOrEmpty()]
+        [string] $QuickSupportID = $null
+
+    )
+    begin
+    {
+        if ( $PSCmdlet.ParameterSetName -eq 'ById')
+        {
+            $Identity = Get-TVUser -UserID $UserID 
+        }
+    }
+    process
+    {
+
+        if ( $null -eq $Identity )
+        {
+            Write-Error -Message 'The Identity object is NULL!'
+        }
+        else
+        {
+
+            [hashtable] $Params = @{} 
+
+            if ( -not ( [string]::IsNullOrEmpty($Name)))
+            {
+                $Params.name = $Name
+            }
+
+            if ( -not ( [string]::IsNullOrEmpty($Password)))
+            {
+                $Params.password =  (New-Object PSCredential "user",$Password).GetNetworkCredential().Password
+            }
+
+            if ( -not ( [string]::IsNullOrEmpty($Email)))
+            {
+                $Params.email = $Email
+            }
+
+            if ( -not ( [string]::IsNullOrEmpty($QuickJoinID)))
+            {
+                $Params.custom_quickjoin_id = $QuickJoinID
+            }
+        
+            if ( -not ( [string]::IsNullOrEmpty($QuickSupportID)))
+            {
+                $Params.custom_quicksupport_id = $QuickSupportID
+            }
+                    
+            if ( $PSBoundParameters.ContainsKey( "Active" ) ) 
+            {
+                $Params.active = $Active
+            }
+
+            if ( $null -ne $Permissions )
+            {
+                Write-Verbose -Message 'not supported yed'
+                #$Params.permissions = $Permissions -join ','
+            }
+
+            Invoke-TVApiRequest -Token $Token -Resource users -ResourceID $Identity.ID -Method PUT -RequestBody $Params
+
+            Get-TVUser -Token $Token -UserID $Identity.ID
+        }
+
+       
+    }
+
+    end{}
+}
 # Get all groups for a user
 function Get-TVUserGroupMembership
 {
