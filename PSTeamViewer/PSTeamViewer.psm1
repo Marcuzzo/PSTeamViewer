@@ -1,5 +1,6 @@
 <#
-    Powershell Module
+   Powershell Module for Teamviewer
+   This branch is the experimental branch with a new source base.
 #>
 #region Classes
 class TVTokenException : System.Exception
@@ -226,12 +227,14 @@ function Invoke-TVApiRequest
             Authorization = ("Bearer {0}" -f $Token)
         }            
         [string] $RequestUrl = ('{0}/api/{1}/{2}' -f $BaseUrl, $ApiVersion, $Resource)   
+        #                       '{0}/api/{1}/groups/{2}/share_group'
 
         # Add the resource ID when available
         if ( ! ( [string]::IsNullOrEmpty($ResourceID)))
         {
             $RequestUrl += ('/{0}' -f $ResourceID)
         }
+
         #Write-Verbose -Message ('Running RequestURL: {0}' -f $RequestURL)
     }
     
@@ -693,6 +696,22 @@ function Get-TVUserGroupMembership
         [Parameter()]
         [TVUserBase] $TVPrincipal
     )
+}
+
+#endregion
+
+
+#region Groups
+
+
+function Remove-TVGroupMember
+{
+
+}
+
+function Add-TVGroupMember
+{
+
 }
 
 #endregion
