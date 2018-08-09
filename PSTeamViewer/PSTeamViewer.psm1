@@ -65,6 +65,7 @@ class TVUser : TVUserBase
     [bool]$ShowCommentWindow
     [string]$QuickSupportID
     [string]$QuickJoinID
+    [string] $Email
     TVUser(
             $ID, 
             $Name, 
@@ -72,6 +73,7 @@ class TVUser : TVUserBase
             $Active, 
             $LogSessions, 
             $ShowCommentWindow, 
+            $Email,
             $QuickSupportID, 
             $QuickJoinID
     ) 
@@ -83,6 +85,7 @@ class TVUser : TVUserBase
        $this.QuickJoinID = $QuickJoinID
        $this.ShowCommentWindow = $ShowCommentWindow
        $this.LogSessions = $LogSessions
+       $this.Email = $Email
     }
     TVUser(
             $ID, 
@@ -90,7 +93,8 @@ class TVUser : TVUserBase
             $Permissions, 
             $Active, 
             $LogSessions, 
-            $ShowCommentWindow
+            $ShowCommentWindow,
+            $Email
     ) 
     : base ($ID, $Name) 
     {
@@ -98,6 +102,7 @@ class TVUser : TVUserBase
        $this.Active = $Active
        $this.ShowCommentWindow = $ShowCommentWindow
        $this.LogSessions = $LogSessions
+       $this.Email = $Email
     }
 }
 
@@ -234,6 +239,7 @@ function Initialize-TVUserObject
                                                        $Json.active, `
                                                        $Json.log_sessions, `
                                                        $Json.show_comment_window, `
+                                                       $Json.email, `
                                                        $QuickSupportID, `
                                                        $QuickJoinID
     Write-Output -InputObject $TVUser
