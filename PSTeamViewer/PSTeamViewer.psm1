@@ -186,7 +186,6 @@ Class TVDevice
 #endregion Classes
 
 #region API call
-
 function Invoke-TVApiRequest
 {
     [CmdletBinding()]
@@ -703,14 +702,67 @@ function Get-TVUserGroupMembership
 
 #region Groups
 
-
 function Remove-TVGroupMember
 {
+    [CmdletBinding()]
+    param(
+
+        [Parameter(
+            Mandatory = $true       
+        )]
+        [string] $Token,
+
+        [Parameter(
+            Mandatory=$true, 
+            ParameterSetName='ByGroupObjectUserObject'
+        )]
+        [Parameter(
+            Mandatory=$true, 
+            ParameterSetName='ByGroupObjectUserID'
+        )]
+        [TVGroup] $Group,
+
+        [Parameter(
+            Mandatory=$true, 
+            ParameterSetName='ByGroupIDUserObject'
+        )]
+        [Parameter(
+            Mandatory=$true, 
+            ParameterSetName='ByGroupIDUserID'
+        )]
+        [int] $GroupID,
+
+        [Parameter(
+            Mandatory=$true, 
+            ParameterSetName='ByGroupObjectUserObject'
+        )]
+        [Parameter(
+            Mandatory=$true, 
+            ParameterSetName='ByGroupIDUserObject'
+        )]
+        [TVUser] $User,
+
+        [Parameter(
+            Mandatory=$true, 
+            ParameterSetName='ByGroupObjectUserID'
+        )]
+        [Parameter(
+            Mandatory=$true, 
+            ParameterSetName='ByGroupIDUserID'
+        )]
+        [int] $UserID
+
+
+
+    )
 
 }
 
 function Add-TVGroupMember
 {
+
+    [CmdletBinding()]
+    param()
 
 }
 
