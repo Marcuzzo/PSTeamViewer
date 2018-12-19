@@ -1299,6 +1299,74 @@ function New-TVDevice
     )
 }
 
+function Remove-TVDevice
+{
+    [CmdletBinding(
+        SupportsShouldProcess=$true
+    )]
+    param(
+        [Parameter( Position = 0 )]
+        [string] $Token = $script:TVConfig.AccessToken,
+
+        [Parameter( Mandatory = $true, Position = 1, ParameterSetName = 'ByDeviceID' )]
+        [string] $DeviceID,
+
+        [Parameter(
+            Mandatory = $true, 
+            Position = 1, 
+            ParameterSetName = 'ByInputObject',
+            ValueFromPipeline = $true
+        )]
+        [ValidateNotNull()]
+        [TVDevice] $InputObject
+    )
+
+    begin
+    {
+                
+        if ( [string]::IsNullOrEmpty($Token) ) {
+            throw (New-Object -TypeName System.Exception -ArgumentList $script:TOKEN_MISSING_ERROR)
+        }
+        
+        Write-Verbose -Message ('ParameterSet: {0}' -f $PSCmdlet.ParameterSetName)
+        
+        if ( $PSCmdlet.ParameterSetName -eq 'ByDeviceID')
+        {
+            $InputObject = Get-TVDevice | Where-Object { $_.DeviceID -eq $DeviceID}
+        }
+    }
+
+    process
+    {
+
+
+        [string] $RequestUrl = ('{0}/api/{1}/devices/{2}' -f $script:TVConfig.BaseUrl, $script:TVConfig.ApiVersion, $InputObject.DeviceID)  
+    
+                
+        Try
+        {
+
+            Write-Verbose -Message ('Removing device: {0} with deviceID: {1}' -f $InputObject.Alias, $InputObject.DeviceID)
+            Invoke-RestMethod -Method DELETE `
+                                            -Uri $RequestUrl `
+                                            -Headers $script:TVConfig.Header `
+                                            -ContentType 'application/json' `
+                                            -ErrorVariable respError     
+
+            #Get-TVUser -UserID $Identity.ID -Token $Token
+    
+        }
+        catch
+        {           
+            $ErrJson = $_.ErrorDetails.Message | convertFrom-json 
+            Write-Error -Message $ErrJson.error_description
+        }
+    }
+    
+
+}
+
+
 #endregion Devices
 
 #region Groups

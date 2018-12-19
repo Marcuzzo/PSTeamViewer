@@ -76,7 +76,7 @@ FunctionsToExport = @(
                     'Get-TVAccount', 
                     'New-TVUser',  'Get-TVUser', 'Set-TVUser', 'Get-TVUserGroups',
                     'New-TVGroup', 'Get-TVGroup', 'Remove-TVGroup', 'Add-TVGroupMember', 'Remove-TVGroupMember',
-                    'Get-TVDevice', 'Set-TVDevice', 
+                    'Get-TVDevice', 'Set-TVDevice', 'Remove-TVDevice'
                     'Start-TVRemoteControl'
                     )
 
