@@ -1,21 +1,23 @@
 # TeamViewer Powershell Module
 
+<!--
 [![Build status](https://ci.appveyor.com/api/projects/status/1n8li43y0b2aydru?svg=true)](https://ci.appveyor.com/project/Marcuzzo/psteamviewer)
 [![Documentation Status](https://readthedocs.org/projects/psteamviewer/badge/?version=latest)](http://psteamviewer.readthedocs.io/en/latest/?badge=latest)
+-->
 
 This is a PowerShell module API wrapper for the [TeamViewer API](https://integrate.teamviewer.com/en/develop/api/).
 
 ## Description
 
 This is a Powershell module to interact with the TeamViewer API.  
-*This is still a work in progress*
+> *This is still a work in progress and some functions have not been tested.*
 
 ## Installing
 
-The module is available on [PowershellGallery](https://www.powershellgallery.com/packages/PSTeamViewer)
+The 'old' module is available on [PowershellGallery](https://www.powershellgallery.com/packages/PSTeamViewer)
 
 ```powershell
-Install-Module -Name PSTeamViewer 
+Install-Module -Name PSTeamViewer
 ```
 
 ## Documentation
