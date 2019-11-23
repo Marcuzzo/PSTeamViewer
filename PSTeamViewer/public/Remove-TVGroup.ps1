@@ -94,7 +94,6 @@ function Remove-TVGroup
             }
         }
 
-  
         Write-Verbose -Message ('Setname: {0}' -f $PSCmdlet.ParameterSetName)
         if ( $PSCmdlet.ParameterSetName -ne 'ByInputObject')
         {
