@@ -9,7 +9,7 @@
     [string] $SupportedFeatures
     [string] $Description
     [string] $PolicyID
-    [string] $LastSeen
+    [Nullable[DateTime]] $LastSeen
 
     # Dummy constructor
     TVDevice() { }
@@ -23,7 +23,7 @@
         [string] $SupportedFeatures,
         [string] $Description,
         [string] $PolicyID,
-        [string] $LastSeen
+        [Nullable[DateTime]] $LastSeen
     )
     {
         $this.Alias = $Alias
