@@ -23,7 +23,6 @@ function Get-TVGroupMember
     [CmdletBinding()]
     [OutputType([TVUser[]])]
     param(
-        
         [Parameter(
             Mandatory = $true
         )]
@@ -33,7 +32,7 @@ function Get-TVGroupMember
             Mandatory = $true,
             ValueFromPipeline = $true,
             ValueFromPipelineByPropertyName = $true,
-            ParameterSetName = 'ByInputObject'         
+            ParameterSetName = 'ByInputObject'
         )]
         [TVGroup] $Group,
 
@@ -43,7 +42,7 @@ function Get-TVGroupMember
         )]
         [string] $Name
     )
-    begin 
+    begin
     {
         if ( $PSCmdlet.ParameterSetName -eq 'ByName')
         {
@@ -60,7 +59,16 @@ function Get-TVGroupMember
     {
         $Group.SharedWith | ForEach-Object {
             Write-Verbose -Message ('Getting user with ID: {0} and name: {1}' -f $_.ID, $_.Name)
-            Get-TVUser -Token $Token -UserID $_.ID             
+            [TVUser] $User = Get-TVUser -Token $Token -UserID $_.ID
+            if ( $null -ne $User)
+            {
+                Write-Output -InputObject $User
+            }
+            else
+            {
+                # Not sure if it's worth mentionning but could be usefull to clean up stale groups
+                #Write-Error -Message ('No user found with ID: {0} and name: {1}' -f $_.ID, $_.Name)
+            }
         }
     }
     end { }
