@@ -29,15 +29,45 @@ The documentation of the CmdLets can be viewed on the terminal with Get-Help and
 ```powershell
 Import-Module PSTeamViewer
 
-# This CmdLet stores your token in a variable.
-# This way you don't have to supply the token parameter on every CmdLet
-Initialize-TVAPI -Token 'YOUR-TEAMVIEWER-TOKEN'
+# I recommend storing your API Token in an environmentvariable
 
-# Get all users
-Get-TVUser
+## Get All users
+Get-TVUser -Token $env:TeamViewerToken
 
-# -or when you didn't call the Initialize-TVAPI CmdLet:
-Get-TVUser -Token 'YOUR-TEAMVIEWER-TOKEN'
+## Get a user by name
+Get-TVUser -Token $env:TeamViewerToken -Name '[USERNAME]'
+
+## Get user by UserID
+Get-TVUser -Token $env:TeamViewerToken -UserID '[USERID]'
+
+
+# Modify a user
+$User = Get-TVUser -Token $env:TeamViewerToken -UserID '[USERID]'
+$User | Set-TVUser -Token $env:TeamViewerToken -Name '[NEW_NAME]' -Active $false
+
+# Disable a TVUser
+$User | Set-TVUser -Token $env:TeamViewerToken -Active $false
+
+# Get all TVGroups
+Get-TVGroup -Token $env:TeamViewerToken
+
+# Get a specific group by name
+Get-TVGroup -Token $env:TeamViewerToken -Name '[GROUPNAME]'
+
+# Get a specific group by ID
+Get-TVGroup -Token $env:TeamViewerToken -GroupID '[GROUPID]'
+
+# Create a new group
+$Group = New-TVGroup -Token $env:TeamViewerToken -Name '[GROUPNAME]'
+
+# Rename a Group
+$Group = Get-TVGroup -Token $env:TeamViewerToken -GroupID '[GROUPID]'
+$Group | Set-TVGroup -Token $env:TeamViewerToken -NewName '[NEW_GROUPNAME]'
+
+# Delete a Group
+$Group | Remove-TVGroup -Token $env:TeamViewerToken
+
+
 
 ```
 
