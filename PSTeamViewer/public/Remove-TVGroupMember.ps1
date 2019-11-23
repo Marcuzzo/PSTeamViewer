@@ -1,15 +1,17 @@
 function Remove-TVGroupMember
 {
-    [CmdletBinding()]
+    [CmdletBinding(
+        SupportsShouldProcess = $true
+    )]
     param(
-        
+
         [Parameter(
             Mandatory = $true
         )]
         [string] $Token,
 
         [Parameter(
-            Mandatory = $true            
+            Mandatory = $true
         )]
         [TVGroup] $Group,
 
@@ -22,9 +24,21 @@ function Remove-TVGroupMember
     {
         [hashtable] $Params = @{
             users = @(
-                $User.ID                               
-            )           
-        }        
-        Invoke-TVApiRequest -Token $Token -Resource groups -PrincipalID ('{0}/unshare_group' -f $Group.ID) -Method POST -RequestBody $Params -WhatIf
+                $User.ID
+            )
+        }
+        if ( $PSCmdlet.ShouldProcess($User.Name, 'Remove GroupMember') )
+        {
+
+            $ApiParams = @{
+                Token       = $Token
+                Resource    = 'groups'
+                PrincipalID = ('{0}/unshare_group' -f $Group.ID)
+                Method      = 'POST'
+                RequestBody = $Params
+            }
+            #Invoke-TVApiRequest -Token $Token -Resource groups -PrincipalID ('{0}/unshare_group' -f $Group.ID) -Method POST -RequestBody $Params -WhatIf
+            Invoke-TVApiRequest @ApiParams
+        }
     }
 }
