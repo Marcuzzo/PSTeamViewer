@@ -78,19 +78,26 @@ The specific UserID, DeviceID, GroupID, ContactID or SessionID to process
         Write-Verbose -Message ('Request URL: "{0}".' -f $RequestUrl)
         try
         {
-
             if ( $PSCmdlet.ShouldProcess($Resource, $Method))
             {
-                $response = Invoke-RestMethod @Parameters
-                Write-Verbose -Message 'Returning TVObject...'
-                Write-Verbose -Message $response
+                $response = Invoke-RestMethod @Parameters 
+                Write-Verbose -Message ('Returning TVObject: {0}' -f $response )
                 Write-Output -InputObject $response
             }
         }
         catch
         {
+            Write-Verbose -Message ('Invoke-TVApiRequest Exception: {0}' -f $_.Exception.InnerException )
+            Write-Verbose -Message ('Invoke-TVApiRequest Exception: {0}' -f $_ )
             $ErrJson = $_ | convertFrom-json
-            throw New-Object -TypeName TVException -ArgumentList $ErrJson.error, $ErrJson.error_description, $ErrJson.error_code
+            if ( $ErrJson.Message.StartsWith('No HTTP resource was found that matches the request URI'))
+            {
+                throw New-Object -TypeName TVException -ArgumentList $ErrJson.Message, $ErrJson.Message, 1
+            }
+            else
+            {
+                throw New-Object -TypeName TVException -ArgumentList $ErrJson.error, $ErrJson.error_description, $ErrJson.error_code
+            }
         }
     }
 
