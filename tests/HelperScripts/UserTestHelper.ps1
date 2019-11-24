@@ -1,8 +1,6 @@
-
-# Set-Content -Path $JsonDataFile -Value '{ "users" : [  { "id" : "u0000001",    "name" : "Mighty Administrator",    "permissions" : "ManageAdmins, ManageUsers, ShareOwnGroups, EditFullProfile, ViewAllConnections, ViewOwnConnections, EditConnections, DeleteConnections, ManagePolicies, AssignPolicies, AcknowledgeAllAlerts,AcknowledgeOwnAlerts, ViewAllAssets, ViewOwnAssets, EditAllCustomModuleConfigs, EditOwnCustomModuleConfigs",    "active": true,    "email": "admin@example.com"  },  { "id" : "u0000002",    "name" : "John Doe",    "permissions" : "EditFullProfile",    "email": "user@example.com"  }] } '
-
-
-
+<#
+Helper script for the TVUser CmdLets
+#>
 function Initialize-UserData
 {
     [CmdletBinding()]
@@ -25,7 +23,6 @@ function Initialize-UserData
         )
     }
     $DefaultTestJsonData | ConvertTo-Json | Out-File $Path
-    #Add-UserData -Path $Path -Name 'Mighty Administrator' -Email 'admin@example.com'
 }
 
 function Get-NewUserID
@@ -189,11 +186,3 @@ function Remove-UserData
     [CmdletBinding()]
     param()
 }
-
-# Add-UserData -Email 'test@example.com' -Name 'testuser' -Pwd 'testPWD'
-# Add-UserData -Email 'test2@example.com' -Name 'testuser2' -Pwd 'testPWD'
-
-
-# Cleaning up
-#Remove-Item -Path $JsonDataFile
-
