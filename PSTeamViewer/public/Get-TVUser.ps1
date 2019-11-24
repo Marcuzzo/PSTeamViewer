@@ -94,11 +94,12 @@
                     Try
                     {
                         $response = Invoke-TVApiRequest -Token $Token -Resource users -PrincipalID $ID -Method GET -RequestBody $RequestBody
+                        Write-Verbose -Message ('Response: "{0}".' -f $response )
                         Write-Output -InputObject ( Initialize-TVUserObject -Json $response )
                     }
                     catch
                     {
-                        Write-Error -Message $_.Exception.Message
+                        Write-Error -Message ('Got the error: {0}.' -f $_.Exception.Message)
                     }
                 }
             }
@@ -120,7 +121,7 @@
 
                 $response = Invoke-TVApiRequest -Token $Token -Resource users -Method GET -RequestBody $RequestBody
 
-                Write-Verbose -Message ('Response: "{0}".' -f $response )
+                Write-Verbose -Message ('Get-TVUser - Response: "{0}".' -f $response )
 
                 if ( $null -ne $response)
                 {
