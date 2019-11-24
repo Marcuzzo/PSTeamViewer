@@ -1,6 +1,7 @@
 # Import the PSTeamViewer Module
 Import-Module "$PSScriptRoot\..\PSTeamViewer\PSTeamViewer.psd1" -Force
 
+# dotsource the helperscripts
 . $PSScriptRoot\HelperScripts\UserTestHelper.ps1
 
 # This token will not actually be used as the Invoke-RestMethod is mocked.
