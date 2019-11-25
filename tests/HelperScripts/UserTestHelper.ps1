@@ -95,9 +95,10 @@ function Add-UserData
         custom_quicksupport_id = $QuickSupportID
         custom_quickjoin_id    = $QuickJoinID
     }
-    $Obj = Get-UserData -JsonDataFile $Path
+    $Obj = Get-UserData -Path $Path
     $obj.users += $UserData
     $obj | ConvertTo-Json | Out-File $Path
+    Get-UserData -Path $Path -ID $ID
 }
 
 function Get-UserData
@@ -110,7 +111,7 @@ function Get-UserData
         [Parameter(
             Mandatory = $true
         )]
-        [string] $JsonDataFile,
+        [string] $Path,
 
         [Parameter(
             Mandatory = $false,
@@ -134,10 +135,10 @@ function Get-UserData
 
     Write-Verbose -Message 'Reading json data'
 
-    if ( Test-Path -Path $JsonDataFile )
+    if ( Test-Path -Path $Path )
     {
 
-        $JsonFileContent = Get-Content -Path $JsonDataFile -Raw
+        $JsonFileContent = Get-Content -Path $Path -Raw
         Write-Verbose -Message ('JSON Content: {0}' -f $JsonFileContent)
         $Json = $JsonFileContent | ConvertFrom-Json
 
@@ -172,14 +173,64 @@ function Get-UserData
     }
     else
     {
-        Write-Warning -Message ('The file: "{0}" was not found' -f $JsonDataFile)
+        Write-Warning -Message ('The file: "{0}" was not found' -f $Path)
     }
 }
 
 function Set-UserData
 {
-    [CmdletBinding()]
-    param()
+    [CmdletBinding(
+        SupportsShouldProcess = $true
+    )]
+    param(
+        [Parameter(
+            Mandatory = $true
+        )]
+        [string] $Path,
+
+        [Parameter(
+            Mandatory = $true
+        )]
+        [string] $ID,
+
+        [Parameter(
+            Mandatory = $false
+        )]
+        [string] $Name,
+
+        [Parameter(
+            Mandatory = $false
+        )]
+        [string] $Email,
+
+        [Parameter(
+            Mandatory = $false
+        )]
+        [bool] $Active
+    )
+
+    $AllUserData = Get-UserData -Path $Path
+
+    If ($PSCmdlet.ShouldProcess( ('Modify user: {0}' -f $Identity.Name)))
+    {
+
+        $UserData = $AllUserData.users | where { $_.id -eq $ID }
+
+        if ( -not ( [string]::IsNullOrEmpty($Name)))
+        {
+            $UserData.name = $Name
+        }
+
+        if ( $PSBoundParameters.ContainsKey('Active'))
+        {
+            Write-Verbose -Message 'Adding active'
+            $UserData.active = $Active
+        }
+
+        $AllUserData | ConvertTo-Json | Out-File $Path
+
+        Get-UserData -Path $Path -ID $ID
+    }
 }
 function Remove-UserData
 {
