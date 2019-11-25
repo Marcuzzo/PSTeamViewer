@@ -2,11 +2,36 @@ function Get-TVDevice
 {
     <#
     .SYNOPSIS
-    Modify an existing TVDevice
+    Get a TVDevice
     .DESCRIPTION
-    Modify an existing TVDevice
+    Get a TVDevice
     .PARAMETER Token
     The Teamviewer API token generated on the Teamviewer Management console (https://login.teamviewer.com)
+    .PARAMETER OnlineState
+    Get a list of devices with a specific online state. Online or Offline.
+    .PARAMETER GroupID
+    Get all devices that are member of a specific group using the GroupID
+    .PARAMETER RemoteControlID
+    Get a specific TVDevice by it's RemoteControlID
+    .EXAMPLE
+    Get-TVDevice -Token $env:TVAccessToken
+    Get all devices
+    .EXAMPLE
+    Get-TVDevice -Token $env:TVAccessToken -OnlineState 'Online'
+    Get a list of all devices that are Online.
+    .EXAMPLE
+    Get-TVDevice -Token $env:TVAccessToken -OnlineState 'Offline'
+    Get a list of all devices that are Offline.
+    .EXAMPLE
+    Get-TVDevice -Token $env:TVAccessToken -GroupID 'g123456'
+    Get a list of all devices that are member of the group with ID: 'g123456g.
+    .EXAMPLE
+    Get-TVDevice -Token $env:TVAccessToken -RemoteControlID '123456789'
+    Get the device with remote control id: '123456789.
+    .LINK
+    Set-TVDevice
+    .LINK
+    Remove-TVDevice
     #>
     [OutputType([TVDevice])]
     [CmdletBinding()]
