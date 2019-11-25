@@ -127,7 +127,7 @@ function Set-TVUser
             $Identity = Get-TVUser -UserID $UserID -Token $Token
         }
 
-        Write-Verbose -Message ('ParameterSet: {0}' -f $PSCmdlet.ParameterSetName)
+        Write-Verbose -Message ('Set-TVUser - ParameterSet: {0}' -f $PSCmdlet.ParameterSetName)
     }
 
     process
