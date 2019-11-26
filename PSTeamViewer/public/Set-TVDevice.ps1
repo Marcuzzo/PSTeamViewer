@@ -46,6 +46,8 @@ Get-TVPolicy
 Get-TVGroup
 .INPUTS
 TVDevice. The TVDevice object returned by Get-TVDevice.
+.NOTES
+Author: Marco Micozzi
  #>
     [OutputType([TVDevice])]
     [CmdLetBinding(
