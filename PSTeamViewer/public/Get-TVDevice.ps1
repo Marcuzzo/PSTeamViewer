@@ -13,6 +13,8 @@ function Get-TVDevice
     Get all devices that are member of a specific group using the GroupID
     .PARAMETER RemoteControlID
     Get a specific TVDevice by it's RemoteControlID
+    .PARAMETER DeviceID
+    Get a specific TVDevice by it's DeviceID
     .EXAMPLE
     Get-TVDevice -Token $env:TVAccessToken
     Get all devices
@@ -28,10 +30,14 @@ function Get-TVDevice
     .EXAMPLE
     Get-TVDevice -Token $env:TVAccessToken -RemoteControlID '123456789'
     Get the device with remote control id: '123456789.
+    .OUTPUTS
+    TVDevice. One or more TVDevice objects.
     .LINK
     Set-TVDevice
     .LINK
     Remove-TVDevice
+    .NOTES
+    Author: Marco Micozzi
     #>
     [OutputType([TVDevice])]
     [CmdletBinding()]
@@ -43,44 +49,67 @@ function Get-TVDevice
         [string] $Token,
 
         [Parameter(
-            Mandatory = $false
+            Mandatory = $false,
+            ParameterSetName = 'ByOtherProps'
         )]
         [ValidateSet('Online', 'Offline')]
         [string] $OnlineState = [string]::Empty,
 
         [Parameter(
-            Mandatory = $false
+            Mandatory = $false,
+            ParameterSetName = 'ByOtherProps'
         )]
         [string] $GroupID = [string]::Empty,
 
         [Parameter(
-            Mandatory = $false
+            Mandatory = $false,
+            ParameterSetName = 'ByOtherProps'
         )]
-        [string] $RemoteControlID = [string]::Empty
+        [string] $RemoteControlID = [string]::Empty,
+
+        [Parameter(
+            Mandatory = $true,
+            ParameterSetName = 'ByDeviceID'
+        )]
+        [string] $DeviceID
     )
 
     begin
     {
-        [hashtable] $RequestBody = @{ }
+        $ApiParams = @{
+            Token    = $Token
+            Resource = 'devices'
+            Method   = 'GET'
+        }
     }
     process
     {
-        if ( ! ( [string]::IsNullOrEmpty($OnlineState)))
+
+        if ( $PSCmdlet.ParameterSetName -eq 'ByOtherProps')
         {
-            $RequestBody.online_state = $OnlineState
+            [hashtable] $RequestBody = @{ }
+            if ( ! ( [string]::IsNullOrEmpty($OnlineState)))
+            {
+                $RequestBody.online_state = $OnlineState
+            }
+
+            if ( ! ( [string]::IsNullOrEmpty($GroupID)))
+            {
+                $RequestBody.groupid = $GroupID
+            }
+
+            if ( ! ( [string]::IsNullOrEmpty($RemoteControlID ) ) )
+            {
+                $RequestBody.remotecontrol_id = $RemoteControlID
+            }
+            $ApiParams.RequestBody = $RequestBody
+        }
+        elseif ($PSCmdlet.ParameterSetName -eq 'ByDeviceID')
+        {
+            $ApiParams.PrincipalID = $DeviceID
         }
 
-        if ( ! ( [string]::IsNullOrEmpty($GroupID)))
-        {
-            $RequestBody.groupid = $GroupID
-        }
-
-        if ( ! ( [string]::IsNullOrEmpty($RemoteControlID ) ) )
-        {
-            $RequestBody.remotecontrol_id = $RemoteControlID
-        }
-
-        $Response = Invoke-TVApiRequest -Token $Token -Resource devices -Method GET -RequestBody $RequestBody
+        $Response = Invoke-TVApiRequest @ApiParams
 
         $Response.devices | ForEach-Object {
 
