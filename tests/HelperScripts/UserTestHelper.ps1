@@ -10,7 +10,7 @@ function Initialize-UserData
     )
 
     $DefaultTestJsonData = @{
-        Users = @(
+        users = @(
             @{
                 id                     = ("u{0:0000000}" -f 1)
                 name                   = 'Mighty Administrator'
