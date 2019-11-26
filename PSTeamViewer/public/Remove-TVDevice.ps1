@@ -1,6 +1,30 @@
 function Remove-TVDevice
 {
     <#
+    .SYNOPSIS
+    Remove a TVDevice.
+    .DESCRIPTION
+    Remove a TVDevice.
+    .PARAMETER Token
+    The Teamviewer API token generated on the Teamviewer Management console (https://login.teamviewer.com)
+    .PARAMETER InputObject
+    The TVDevice Object as returned by Get-TVDevice.
+    .PARAMETER DeviceID
+    The ID of the TVDevice to remove.
+    .EXAMPLE
+    Remove-TVDevice -Token $env:TVAccessToken -DeviceID 'g1234567'
+    Removes the device with ID: g1234567
+    .EXAMPLE
+    Get-TVDevice -Token $envTVAccessToken -DeviceID 'g7654321' | Remove-TVDevice -Token $env:TVAccessToken
+    Removes the device with ID g7654321.
+    .INPUTS
+    TVDevice. The TVDevice object returned by Get-TVDevice.
+    .OUTPUTS
+    bool. False if the removal failed
+    .LINK
+    Get-TVDevice
+    .NOTES
+    Author: Marco Micozzi
     #>
     [OutputType([bool])]
     [CmdletBinding(
@@ -55,7 +79,6 @@ function Remove-TVDevice
 
                 Invoke-TVApiRequest @Param
 
-                # return ( $null -eq (Get-TVGroup -Token $Token -Name $InputObject.Name) )
             }
             catch
             {
