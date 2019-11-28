@@ -120,15 +120,23 @@ Author: Marco Micozzi
         if ( -not ( [string]::IsNullOrEmpty($PolicyID)))
         {
 
-            # Make sure the policy exists.
-            [TVPolicy] $Policy = Get-TVPolicy -Token $Token -PolicyID $PolicyID
-            if ( $null -ne $Policy )
+            if ( $PolicyID -eq 'inherit')
             {
-                $RequestBody.policy_id = $Policy.PolicyID
+                $RequestBody.policy_id = $PolicyID
             }
             else
             {
-                Write-Error -Message ('The Policy with ID: "{0}" was not found!' -f $PolicyID)
+                # Make sure the policy exists.
+                [TVPolicy] $Policy = Get-TVPolicy -Token $Token -PolicyID $PolicyID
+                if ( $null -ne $Policy )
+                {
+                    $RequestBody.policy_id = $Policy.PolicyID
+                }
+                else
+                {
+                    Write-Error -Message ('The Policy with ID: "{0}" was not found!' -f $PolicyID)
+                }
+
             }
         }
 
