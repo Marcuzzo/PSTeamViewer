@@ -111,9 +111,11 @@ function Get-TVDevice
 
         $Response = Invoke-TVApiRequest @ApiParams
 
+        Write-Verbose -Message ('Get-TVDevice - Response: {0}' -f $Response)
+
         $Response.devices | ForEach-Object {
 
-            Write-Verbose -Message $_
+            Write-Verbose -Message ('Processing device: {0}' -f $_.alias)
 
             if ($null -eq $_.last_seen)
             {
@@ -125,6 +127,7 @@ function Get-TVDevice
             }
 
             Write-Verbose -Message ('Last Seen: {0}' -f $LastSeen)
+
             [TVDevice] $TVDevice = New-Object -TypeName TVDevice -Property @{
                 RemoteControlID   = $_.remotecontrol_id
                 DeviceID          = $_.device_id
@@ -137,7 +140,8 @@ function Get-TVDevice
                 PolicyID          = $_.policy_id
                 Description       = $_.description
             }
-            Write-Output $TVDevice
+            Write-Verbose -Message ('Type of object: {0}' -f $TVDevice.GetType())
+            Write-Output -InputObject $TVDevice
         }
     }
 }
