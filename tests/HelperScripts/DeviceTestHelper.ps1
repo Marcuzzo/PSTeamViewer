@@ -1,4 +1,4 @@
-function Initialize-DeviceData
+function Initialize-TVDeviceData
 {
     [CmdletBinding()]
     param(
@@ -38,7 +38,7 @@ function Initialize-DeviceData
     $DefaultTestJsonData | ConvertTo-Json | Out-File $Path
 }
 
-function Get-ComputerData
+function Get-TVDeviceData
 {
     [CmdletBinding(
         DefaultParameterSetName = 'none'
@@ -136,3 +136,7 @@ function Get-ComputerData
     }
 }
 
+function Set-ComputerData
+{
+
+}
