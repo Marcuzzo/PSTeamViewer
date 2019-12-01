@@ -99,6 +99,7 @@
                     }
                     catch
                     {
+
                         Write-Error -Message ('Got the error: {0}.' -f $_.Exception.Message)
                     }
                 }

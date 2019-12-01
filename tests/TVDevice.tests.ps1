@@ -15,7 +15,7 @@ InModuleScope PSTeamViewer {
         # The path to the temp jsson file
         $DataFile = 'TestDrive:\devices.json'
 
-        Initialize-DeviceData -Path $DataFile
+        Initialize-TV   DeviceData -Path $DataFile
 
         Mock -CommandName Invoke-RestMethod -Verifiable -MockWith {
             if ( $Uri -match '/devices/(.+)$')
@@ -40,7 +40,7 @@ InModuleScope PSTeamViewer {
                 {
                     $ComputerDataParams.RemoteControlID = $Body.remotecontrol_id
                 }
-                $Data = Get-ComputerData @ComputerDataParams
+                $Data = Get-TVDeviceData @ComputerDataParams
             }
             return $Data
         } -ParameterFilter {
@@ -66,11 +66,15 @@ InModuleScope PSTeamViewer {
         }
 
         Context 'Get TVDevice by Single Device Group' {
-            $Data = Get-ComputerData -Path $DataFile -GroupID 'g12345679' -verbose
+
+            $Data = Get-TVDevice -Token $TVAPIToken -GroupID 'g12345679'
+
             It 'Tests the Device Alias' {
                 $Data.Alias | Should be 'Laptop1'
             }
+
         }
+
     }
 
 }
