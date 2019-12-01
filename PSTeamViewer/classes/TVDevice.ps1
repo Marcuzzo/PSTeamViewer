@@ -10,7 +10,7 @@ Class TVDevice
 
     <#
         The ID that is unique for this entry of the computers & contacts list.
-        Values are always prefixed with a ‘d’.
+        - Values are always prefixed with a ‘d’.
     #>
     [string] $DeviceID
 
