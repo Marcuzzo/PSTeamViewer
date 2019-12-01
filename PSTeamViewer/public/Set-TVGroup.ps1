@@ -11,7 +11,7 @@ function Set-TVGroup
         [string] $Token,
 
         [Parameter(
-            Mandatory = $true, 
+            Mandatory = $true,
             ValueFromPipeline = $true,
             ParameterSetName = 'ByInputObject'
         )]
@@ -21,12 +21,12 @@ function Set-TVGroup
         [Parameter(
             Mandatory = $true, 
             HelpMessage = 'The name of the group to delete.',
-            ParameterSetName = 'ByName'    
+            ParameterSetName = 'ByName'
         )]
         [string] $Name,
 
         [Parameter(
-            Mandatory = $true, 
+            Mandatory = $true,
             HelpMessage = 'The Group ID of the group to delete.',
             ParameterSetName = 'ByID'
         )]
@@ -44,7 +44,12 @@ function Set-TVGroup
         [Parameter(
             Mandatory = $false
         )]
-        [string] $CompanyUserID = [string]::Empty
+        [string] $CompanyUserID = [string]::Empty,
+
+        [Parameter(
+            Mandatory = $false
+        )]
+        [switch] $PassThru
     )
 
     begin
@@ -54,24 +59,23 @@ function Set-TVGroup
 
     process
     {
-    
-    
-        switch ($PSCmdlet.ParameterSetName) 
+
+        switch ($PSCmdlet.ParameterSetName)
         {
             'ByName'
             {
                 $InputObject = Get-TVGroup -Token $Token -Name $Name -Verbose:$IsVerbose
             }
-            
+
             'ByInputObject' { }
-            
+
             'ByID'
             {
                 $InputObject = Get-TVGroup -Token $Token -GroupID $GroupID -Verbose:$IsVerbose 
             }
-            
+
             Default { }
-        
+
         }
 
         if (!($InputObject))
@@ -94,17 +98,20 @@ function Set-TVGroup
                 {
                     Invoke-TVApiRequest -Token $Token -Resource users -Method PUT -PrincipalID ('{0}/groups/{1}' -f $CompanyUserID, $InputObject.ID ) -RequestBody $Params
                 }
-                Get-TVGroup -Token $Token -Name $InputObject.Name
+
+                if ( $PassThru.IsPresent)
+                {
+                    Get-TVGroup -Token $Token -Name $InputObject.Name
+                }
+
             }
         }
         catch
-        {           
+        {
             Write-Host $_
             $ErrJson = $_ | convertFrom-json 
             Write-Error -Message ("err: {0}" -f $ErrJson.message    )
-            return $false
         }
-
 
     }
 
