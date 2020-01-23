@@ -54,7 +54,7 @@ InModuleScope PSTeamViewer {
         # Mock Updating users
         Mock -CommandName Invoke-RestMethod -Verifiable -MockWith {
             $BodyJson = $Body | ConvertFrom-Json
-            Write-Verbose -Message ('Data: {0}' -f $BodyJson)
+            Write-Verbose -Message ('MOCK Data - Set-TVUser BodyJson: {0}' -f $BodyJson)
 
             if ( $Uri -match '/users/(.+)$')
             {
@@ -96,7 +96,8 @@ InModuleScope PSTeamViewer {
             $uri -match "/api/v1/users" -and $Method -eq 'PUT'
         } -ModuleName PSTeamViewer
 
-
+        # Removing of users is not implemented directly.
+        # Users are instead disabled via Set-TVUser
 
         Context 'Getting User by UserID' {
 
