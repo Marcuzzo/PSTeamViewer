@@ -20,7 +20,8 @@ $classList = @(
     'TVDevice',
     'TVSetting',
     'TVPolicy',
-    'TVUserGroup'
+    'TVUserGroup',
+    'TVContact'
 )
 
 foreach ($class in $classList)
@@ -41,7 +42,7 @@ foreach ($folder in @('private', 'public', 'includes'))
         # dot source each file
         $files | where-Object { $_.name -NotLike '*.Tests.ps1' } | 
         ForEach-Object { Write-Verbose $_.basename; . $_.FullName }
-}
+    }
 }
 
 Export-ModuleMember -function (Get-ChildItem -Path "$PSScriptRoot\public\*.ps1").basename
