@@ -1,18 +1,18 @@
 <#
 #>
-Class TVContact : TVPrincipal
+Class TVContact
 {
 
     <#
         contact_id
         The ID that is unique for this entry of the computers & contacts list.
-        - Values are always prefixed with a ‘c’.
+        * Values are always prefixed with a ‘c’.
     #>
- 
+    [string] $ContactID
 
     <#
         the User ID of the contact.
-        - Prefixed with a ‘u’.
+        * Prefixed with a ‘u’.
     #>
     [string] $UserID
 
@@ -65,4 +65,8 @@ Class TVContact : TVPrincipal
         o groupId – The ID of the group this contact will be a member of.
         o email – The email address of the invitee
     #>
+
+
+    # Dummy constuctor... needed?
+    TVContact() { }
 }
