@@ -80,25 +80,40 @@ The specific UserID, DeviceID, GroupID, ContactID or SessionID to process
         {
             if ( $PSCmdlet.ShouldProcess($Resource, $Method))
             {
-                $response = Invoke-RestMethod @Parameters 
-                Write-Verbose -Message ('Returning TVObject: {0}' -f $response )
+                $response = Invoke-RestMethod @Parameters
+                Write-Verbose -Message ('Invoke-TVApiRequest Response: {0}' -f $response )
+                Write-Verbose -Message ('Invoke-TVApiRequest Response.result: {0}' -f $response.result )
                 Write-Output -InputObject $response
             }
         }
         catch
         {
             Write-Verbose -Message ('Invoke-TVApiRequest Exception: {0}' -f $_.Exception.InnerException )
-            Write-Verbose -Message ('Invoke-TVApiRequest Exception: {0}' -f $_ )
-            $ErrJson = $_ | convertFrom-json
-            if ( $ErrJson.Message.StartsWith('No HTTP resource was found that matches the request URI'))
+            Write-Verbose -Message ('Invoke-TVApiRequest Exception: {0}' -f $_.GetType())
+
+            if ( $_.GetType() -eq [string] )
             {
-                throw New-Object -TypeName TVException -ArgumentList $ErrJson.Message, $ErrJson.Message, 1
+                if ( Test-Json -Json $_ )
+                {
+
+                    $ErrJson = $_ | convertFrom-json
+                    if ( $ErrJson.Message.StartsWith('No HTTP resource was found that matches the request URI'))
+                    {
+                        throw New-Object -TypeName TVException -ArgumentList $ErrJson.Message, $ErrJson.Message, 1
+                    }
+                    else
+                    {
+                        Write-Verbose "StatusCode:" $_.Exception.Response.StatusCode.value__ 
+                        Write-Verbose "StatusDescription:" $_.Exception.Response.StatusDescription
+                        throw New-Object -TypeName TVException -ArgumentList $ErrJson.error, $ErrJson.error_description, $ErrJson.error_code
+                    }
+                }
             }
-            else
+            elseif ($_.GetType() -eq [System.Management.Automation.ErrorRecord])
             {
-                throw New-Object -TypeName TVException -ArgumentList $ErrJson.error, $ErrJson.error_description, $ErrJson.error_code
+                Write-Verbose -Message ('Error Message: {0}' -f $_.Exception.Message)
             }
+
         }
     }
-
 }
