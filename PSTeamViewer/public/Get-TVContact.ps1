@@ -16,7 +16,20 @@ function Get-TVContact
         [Parameter(
             Mandatory = $false
         )]
-        [string] $Email = [string]::Empty
+        [string] $Email = [string]::Empty,
+
+        [Parameter(
+            Mandatory = $false
+        )]
+        [string] $OnlineState,
+
+        [Parameter(
+            Mandatory = $false
+        )]
+        [string] $GroupID,
+
+        [Parameter()]
+        [bool] $IncludeInvitations
     )
 
 
@@ -40,7 +53,36 @@ function Get-TVContact
             $RequestBody.email = $Email
         }
 
-        Invoke-TVApiRequest -Token $Token -Resource contacts -Method GET -RequestBody $RequestBody
+        if ( -not [string]::IsNullOrEmpty($GroupID))
+        {
+            $RequestBody.groupid = $GroupID
+        }
+
+        if ( $IncludeInvitations)
+        {
+            $RequestBody.include_invitations = 'true'
+        }
+
+        $Response = Invoke-TVApiRequest -Token $Token -Resource contacts -Method GET -RequestBody $RequestBody
+
+        if ( $null -ne $Response)
+        {
+            $Response.contacts | ForEach-Object {
+
+                [TVContact] $Contact = New-Object -TypeName TVContact -Property @{
+                    ContactID   = $_.contact_id
+                    Name        = $_.name
+                    GroupID     = $_.groupid
+                    OnlineState = $_.online_state
+                    UserID      = $_.user_id
+                }
+
+                Write-Output -InputObject $Contact
+
+            }
+
+        }
+
     }
 
 }
