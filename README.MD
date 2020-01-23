@@ -71,7 +71,7 @@ $Group | Remove-TVGroup -Token $env:TeamViewerToken
 
 ```
 
-Example scripts can be found in the [example](./example) directory.
+Example scripts can be found in the [examples](./examples) directory.
 
 ## Contributing
 
