@@ -190,7 +190,7 @@ Author: Marco Micozzi
             {
                 if ( $PassThru.IsPresent)
                 {
-                    Write-Output -InputObject (Get-TVDevice -Token $Token | Where-Object { $_.DeviceID -eq $DeviceID } )
+                    Write-Output -InputObject (Get-TVDevice -Token $Token | Where-Object { $_.DeviceID -eq $Identity.DeviceID } )
                 }
             }
             else
